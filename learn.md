@@ -1,6 +1,6 @@
 # Grade III Child UI/UX & Educational Web Application Learnings
 
-This document summarizes the reusable architectural patterns, pedagogical principles, and tactile UI/UX guidelines established while developing **MathStars**, a web calculator designed specifically for **Grade III (Ages 8–9)** children.
+This document summarizes the reusable architectural patterns, pedagogical principles, and tactile UI/UX guidelines established while developing **Aahee's Calculator**, a web calculator designed specifically for **Grade III (Ages 8–9)** children.
 
 ---
 
@@ -43,7 +43,8 @@ Adult calculators emphasize high school and college mental models (trigonometry,
     - 🌈 **Rainbow Playground**: Friendly daytime pastels.
     - 🚀 **Space Adventure**: Cosmic deep indigo, neon stars, and rockets.
     - 🍭 **Candy Kingdom**: Sweet pinks, mint, and sprinkles.
-    - 🦕 **Dino Safari**: Lush jungle greens and warm gold.
+    - 🦕 **Dino Safari**: Lush prehistoric emerald and warm gold.
+    - 🌴 **Jungle Safari**: Exotic rainforest greens, waterfall teal, and sunlit tropical gold.
 
 ---
 

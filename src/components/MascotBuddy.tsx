@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import styles from './MascotBuddy.module.css';
 
-export type MascotId = 'pip' | 'rex' | 'sparky';
+export type MascotId = 'pip' | 'rex' | 'sparky' | 'coco';
 
 interface MascotBuddyProps {
   message: string;
@@ -22,6 +22,7 @@ const MASCOTS: MascotData[] = [
   { id: 'pip', name: 'Pip', emoji: '🐱', title: 'Cosmic Cat', color: '#ec4899' },
   { id: 'rex', name: 'Rex', emoji: '🦖', title: 'Math Dino', color: '#10b981' },
   { id: 'sparky', name: 'Sparky', emoji: '🤖', title: 'Robo Buddy', color: '#3b82f6' },
+  { id: 'coco', name: 'Coco', emoji: '🐒', title: 'Jungle Explorer', color: '#f59e0b' },
 ];
 
 export const MascotBuddy: React.FC<MascotBuddyProps> = ({ message, starsCount }) => {

@@ -52,7 +52,7 @@ export const Confetti: React.FC<ConfettiProps> = ({ active, onComplete }) => {
     }
 
     let animationFrameId: number;
-    let startTime = Date.now();
+    const startTime = Date.now();
 
     const drawStar = (cx: number, cy: number, spikes: number, outerRadius: number, innerRadius: number, color: string) => {
       let rot = (Math.PI / 2) * 3;
