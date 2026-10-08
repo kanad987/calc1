@@ -302,7 +302,7 @@ export const Calculator: React.FC = () => {
             </div>
             <div className={styles.brandText}>
               <h1 className={styles.appName}>QuantumCalc</h1>
-              <span className={styles.appBadge}>v2.0 • TypeScript</span>
+              <span className={styles.appBadge}>v2.1 • TypeScript</span>
             </div>
           </div>
 
