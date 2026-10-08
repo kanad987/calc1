@@ -1,0 +1,193 @@
+.keypadContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.memoryBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 4px 6px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+}
+
+.memBtn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 6px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.memBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.memBtn:active {
+  transform: scale(0.95);
+}
+
+.mainGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.scientificGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 680px) {
+  .scientificGrid {
+    grid-template-columns: 1.1fr 1.4fr;
+  }
+}
+
+.sciSection {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.15);
+  padding: 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.standardSection {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.btn {
+  height: 52px;
+  border-radius: 14px;
+  border: 1px solid var(--glass-border);
+  font-family: var(--font-sans);
+  font-size: 1.15rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  outline: none;
+}
+
+.btn:active,
+.activeKey {
+  transform: scale(0.94);
+  box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.numBtn {
+  background: var(--btn-num-bg);
+  color: var(--btn-num-text);
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+}
+
+.numBtn:hover {
+  background: var(--btn-num-hover);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.opBtn {
+  background: var(--btn-op-bg);
+  color: var(--btn-op-text);
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.opBtn:hover {
+  background: var(--btn-op-hover);
+  color: #ffffff;
+}
+
+.sciBtn {
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--btn-sci-bg);
+  color: var(--btn-sci-text);
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sciBtn:hover {
+  background: var(--btn-sci-hover);
+  color: #ffffff;
+}
+
+.sciBtn:active {
+  transform: scale(0.95);
+}
+
+.fnBtn {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+.fnBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+.actionBtn {
+  background: var(--btn-action-bg);
+  color: var(--btn-action-text);
+  font-weight: 700;
+}
+
+.actionBtn:hover {
+  background: var(--btn-action-hover);
+}
+
+.equalsBtn {
+  background: var(--btn-equals-bg);
+  color: var(--btn-equals-text);
+  font-size: 1.5rem;
+  font-weight: 700;
+  grid-column: span 2;
+  box-shadow: var(--btn-equals-shadow);
+  border: none;
+}
+
+.equalsBtn:hover {
+  background: var(--btn-equals-hover);
+  filter: brightness(1.1);
+}
+
+@media (max-width: 480px) {
+  .btn {
+    height: 48px;
+    font-size: 1.05rem;
+  }
+  .sciBtn {
+    height: 38px;
+    font-size: 0.8rem;
+  }
+}

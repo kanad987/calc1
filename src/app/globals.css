@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --bg-main: #0a0d14;
+  --bg-gradient: radial-gradient(circle at 15% 15%, #18233c 0%, #080a10 60%, #030508 100%);
+  --glass-bg: rgba(18, 24, 38, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-focus: rgba(99, 102, 241, 0.4);
+  --glass-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 40px -10px rgba(99, 102, 241, 0.15);
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-accent: #60a5fa;
+
+  --btn-num-bg: rgba(30, 41, 59, 0.6);
+  --btn-num-hover: rgba(51, 65, 85, 0.85);
+  --btn-num-active: rgba(71, 85, 105, 1);
+  --btn-num-text: #f1f5f9;
+  
+  --btn-op-bg: rgba(49, 46, 129, 0.35);
+  --btn-op-hover: rgba(67, 56, 202, 0.6);
+  --btn-op-active: rgba(79, 70, 229, 0.85);
+  --btn-op-text: #818cf8;
+
+  --btn-sci-bg: rgba(30, 27, 75, 0.4);
+  --btn-sci-hover: rgba(49, 46, 129, 0.7);
+  --btn-sci-text: #c7d2fe;
+  
+  --btn-action-bg: rgba(225, 29, 72, 0.2);
+  --btn-action-hover: rgba(225, 29, 72, 0.35);
+  --btn-action-text: #fda4af;
+
+  --btn-equals-bg: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  --btn-equals-hover: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  --btn-equals-shadow: 0 0 25px rgba(99, 102, 241, 0.5);
+  --btn-equals-text: #ffffff;
+
+  --accent-glow: rgba(99, 102, 241, 0.25);
+  --history-item-hover: rgba(255, 255, 255, 0.05);
+
+  --font-sans: 'Outfit', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+[data-theme='light'] {
+  --bg-main: #f1f5f9;
+  --bg-gradient: radial-gradient(circle at 15% 15%, #e2e8f0 0%, #cbd5e1 60%, #94a3b8 100%);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-border-focus: rgba(79, 70, 229, 0.4);
+  --glass-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.12), 0 0 30px -5px rgba(99, 102, 241, 0.1);
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --text-accent: #3b82f6;
+
+  --btn-num-bg: rgba(241, 245, 249, 0.9);
+  --btn-num-hover: rgba(226, 232, 240, 1);
+  --btn-num-active: rgba(203, 213, 225, 1);
+  --btn-num-text: #0f172a;
+  
+  --btn-op-bg: rgba(238, 242, 255, 0.9);
+  --btn-op-hover: rgba(224, 231, 255, 1);
+  --btn-op-active: rgba(199, 210, 254, 1);
+  --btn-op-text: #4f46e5;
+
+  --btn-sci-bg: rgba(245, 243, 255, 0.9);
+  --btn-sci-hover: rgba(237, 233, 254, 1);
+  --btn-sci-text: #6d28d9;
+  
+  --btn-action-bg: rgba(255, 241, 242, 0.9);
+  --btn-action-hover: rgba(255, 228, 230, 1);
+  --btn-action-text: #e11d48;
+
+  --btn-equals-bg: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+  --btn-equals-hover: linear-gradient(135deg, #4338ca 0%, #4f46e5 100%);
+  --btn-equals-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+  --btn-equals-text: #ffffff;
+
+  --accent-glow: rgba(99, 102, 241, 0.15);
+  --history-item-hover: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme='cyberpunk'] {
+  --bg-main: #06040a;
+  --bg-gradient: radial-gradient(circle at 50% 20%, #1a0826 0%, #07020d 70%, #000000 100%);
+  --glass-bg: rgba(19, 9, 29, 0.85);
+  --glass-border: rgba(244, 63, 94, 0.2);
+  --glass-border-focus: rgba(6, 182, 212, 0.6);
+  --glass-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 35px rgba(244, 63, 94, 0.25);
+  
+  --text-primary: #00f0ff;
+  --text-secondary: #f43f5e;
+  --text-muted: #8b5cf6;
+  --text-accent: #ffe600;
+
+  --btn-num-bg: rgba(26, 16, 40, 0.7);
+  --btn-num-hover: rgba(43, 24, 67, 0.9);
+  --btn-num-active: rgba(67, 36, 104, 1);
+  --btn-num-text: #e0f2fe;
+  
+  --btn-op-bg: rgba(6, 182, 212, 0.15);
+  --btn-op-hover: rgba(6, 182, 212, 0.35);
+  --btn-op-active: rgba(6, 182, 212, 0.6);
+  --btn-op-text: #22d3ee;
+
+  --btn-sci-bg: rgba(139, 92, 246, 0.15);
+  --btn-sci-hover: rgba(139, 92, 246, 0.35);
+  --btn-sci-text: #c084fc;
+  
+  --btn-action-bg: rgba(244, 63, 94, 0.2);
+  --btn-action-hover: rgba(244, 63, 94, 0.4);
+  --btn-action-text: #fb7185;
+
+  --btn-equals-bg: linear-gradient(135deg, #f43f5e 0%, #ffe600 100%);
+  --btn-equals-hover: linear-gradient(135deg, #fb7185 0%, #fef08a 100%);
+  --btn-equals-shadow: 0 0 25px rgba(244, 63, 94, 0.6);
+  --btn-equals-text: #050505;
+
+  --accent-glow: rgba(244, 63, 94, 0.3);
+  --history-item-hover: rgba(244, 63, 94, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  max-width: 100vw;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  background: var(--bg-main);
+  color: var(--text-primary);
+  background-image: var(--bg-gradient);
+  background-attachment: fixed;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.4);
+}
+
+/* Atmospheric Ambient Background Blobs */
+.bg-ambient {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.35;
+  animation: floatOrb 20s ease-in-out infinite alternate;
+}
+
+.orb-1 {
+  width: 450px;
+  height: 450px;
+  background: #6366f1;
+  top: -100px;
+  left: 10%;
+}
+
+.orb-2 {
+  width: 500px;
+  height: 500px;
+  background: #ec4899;
+  bottom: -150px;
+  right: 5%;
+  animation-duration: 25s;
+  animation-direction: alternate-reverse;
+}
+
+.orb-3 {
+  width: 350px;
+  height: 350px;
+  background: #06b6d4;
+  top: 45%;
+  left: 65%;
+  animation-duration: 18s;
+}
+
+@keyframes floatOrb {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(40px, 30px) scale(1.1);
+  }
+  100% {
+    transform: translate(-30px, 60px) scale(0.95);
+  }
+}
+
+/* Keyboard hint badges */
+.key-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  color: var(--text-muted);
+}
