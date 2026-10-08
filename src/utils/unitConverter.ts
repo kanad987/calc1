@@ -1,54 +1,58 @@
 export interface UnitCategory {
   id: string;
   name: string;
+  emoji: string;
   units: { id: string; name: string; toBase: (val: number) => number; fromBase: (val: number) => number }[];
+  funFact: string;
 }
 
 export const UNIT_CATEGORIES: UnitCategory[] = [
   {
     id: 'length',
-    name: 'Length',
+    name: 'Length & Height',
+    emoji: '📏',
+    funFact: '1 Meter = 100 Centimeters! (About the height of a guitar or big dog! 🎸)',
     units: [
+      { id: 'cm', name: 'Centimeters (cm)', toBase: (v) => v / 100, fromBase: (v) => v * 100 },
       { id: 'm', name: 'Meters (m)', toBase: (v) => v, fromBase: (v) => v },
       { id: 'km', name: 'Kilometers (km)', toBase: (v) => v * 1000, fromBase: (v) => v / 1000 },
-      { id: 'cm', name: 'Centimeters (cm)', toBase: (v) => v / 100, fromBase: (v) => v * 100 },
-      { id: 'mm', name: 'Millimeters (mm)', toBase: (v) => v / 1000, fromBase: (v) => v * 1000 },
-      { id: 'mi', name: 'Miles (mi)', toBase: (v) => v * 1609.344, fromBase: (v) => v / 1609.344 },
-      { id: 'yd', name: 'Yards (yd)', toBase: (v) => v * 0.9144, fromBase: (v) => v / 0.9144 },
-      { id: 'ft', name: 'Feet (ft)', toBase: (v) => v * 0.3048, fromBase: (v) => v / 0.3048 },
       { id: 'in', name: 'Inches (in)', toBase: (v) => v * 0.0254, fromBase: (v) => v / 0.0254 },
+      { id: 'ft', name: 'Feet (ft)', toBase: (v) => v * 0.3048, fromBase: (v) => v / 0.3048 },
     ],
   },
   {
     id: 'mass',
-    name: 'Weight / Mass',
+    name: 'Weight',
+    emoji: '⚖️',
+    funFact: '1 Kilogram = 1,000 Grams! (About the weight of a tasty pineapple! 🍍)',
     units: [
-      { id: 'kg', name: 'Kilograms (kg)', toBase: (v) => v, fromBase: (v) => v },
       { id: 'g', name: 'Grams (g)', toBase: (v) => v / 1000, fromBase: (v) => v * 1000 },
-      { id: 'mg', name: 'Milligrams (mg)', toBase: (v) => v / 1000000, fromBase: (v) => v * 1000000 },
-      { id: 'lb', name: 'Pounds (lbs)', toBase: (v) => v * 0.45359237, fromBase: (v) => v / 0.45359237 },
-      { id: 'oz', name: 'Ounces (oz)', toBase: (v) => v * 0.028349523, fromBase: (v) => v / 0.028349523 },
-      { id: 'ton', name: 'Metric Tons (t)', toBase: (v) => v * 1000, fromBase: (v) => v / 1000 },
+      { id: 'kg', name: 'Kilograms (kg)', toBase: (v) => v, fromBase: (v) => v },
+      { id: 'oz', name: 'Ounces (oz)', toBase: (v) => v * 0.0283495, fromBase: (v) => v / 0.0283495 },
+      { id: 'lb', name: 'Pounds (lbs)', toBase: (v) => v * 0.453592, fromBase: (v) => v / 0.453592 },
     ],
   },
   {
-    id: 'temp',
-    name: 'Temperature',
+    id: 'liquid',
+    name: 'Liquid & Cups',
+    emoji: '🥛',
+    funFact: '1 Liter = 1,000 Milliliters! (Fills about 4 full juice cups! 🧃)',
     units: [
-      { id: 'c', name: 'Celsius (°C)', toBase: (v) => v, fromBase: (v) => v },
-      { id: 'f', name: 'Fahrenheit (°F)', toBase: (v) => (v - 32) * (5 / 9), fromBase: (v) => (v * 9) / 5 + 32 },
-      { id: 'k', name: 'Kelvin (K)', toBase: (v) => v - 273.15, fromBase: (v) => v + 273.15 },
+      { id: 'ml', name: 'Milliliters (mL)', toBase: (v) => v / 1000, fromBase: (v) => v * 1000 },
+      { id: 'l', name: 'Liters (L)', toBase: (v) => v, fromBase: (v) => v },
+      { id: 'cup', name: 'Cups (cup)', toBase: (v) => v * 0.24, fromBase: (v) => v / 0.24 },
     ],
   },
   {
-    id: 'data',
-    name: 'Digital Storage',
+    id: 'time',
+    name: 'Time',
+    emoji: '⏰',
+    funFact: '1 Hour = 60 Minutes = 3,600 Seconds! ⏱️',
     units: [
-      { id: 'b', name: 'Bytes (B)', toBase: (v) => v, fromBase: (v) => v },
-      { id: 'kb', name: 'Kilobytes (KB)', toBase: (v) => v * 1024, fromBase: (v) => v / 1024 },
-      { id: 'mb', name: 'Megabytes (MB)', toBase: (v) => v * 1024 ** 2, fromBase: (v) => v / 1024 ** 2 },
-      { id: 'gb', name: 'Gigabytes (GB)', toBase: (v) => v * 1024 ** 3, fromBase: (v) => v / 1024 ** 3 },
-      { id: 'tb', name: 'Terabytes (TB)', toBase: (v) => v * 1024 ** 4, fromBase: (v) => v / 1024 ** 4 },
+      { id: 'sec', name: 'Seconds (s)', toBase: (v) => v / 60, fromBase: (v) => v * 60 },
+      { id: 'min', name: 'Minutes (min)', toBase: (v) => v, fromBase: (v) => v },
+      { id: 'hr', name: 'Hours (hr)', toBase: (v) => v * 60, fromBase: (v) => v / 60 },
+      { id: 'day', name: 'Days (day)', toBase: (v) => v * 1440, fromBase: (v) => v / 1440 },
     ],
   },
 ];
@@ -63,7 +67,8 @@ export function convertUnits(val: number, fromUnitId: string, toUnitId: string, 
 
   if (!fromUnit || !toUnit) return val;
 
-  const baseValue = fromUnit.toBase(val);
-  const finalValue = toUnit.fromBase(baseValue);
-  return Number(Math.round(Number(finalValue + 'e8')) + 'e-8');
+  const baseVal = fromUnit.toBase(val);
+  const convertedVal = toUnit.fromBase(baseVal);
+
+  return Number(Math.round(Number(convertedVal + 'e4')) + 'e-4');
 }

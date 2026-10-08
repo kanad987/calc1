@@ -2,90 +2,161 @@
 
 import React, { useState } from 'react';
 import styles from './Display.module.css';
-import { AngleMode } from '@/utils/mathEngine';
+import { audioFeedback } from '@/utils/audioFeedback';
+import { numberToWords } from '@/utils/mathEngine';
 
 interface DisplayProps {
   expression: string;
   result: string;
   preview: string;
-  hasMemory: boolean;
-  angleMode: AngleMode;
-  isScientific: boolean;
-  onToggleAngleMode: () => void;
   error?: string | null;
+  remainderMode: boolean;
+  onToggleRemainderMode: () => void;
+  onOpenVisualizer: () => void;
+  remainderResult?: {
+    quotient: number;
+    remainder: number;
+    text: string;
+  };
 }
 
 export const Display: React.FC<DisplayProps> = ({
   expression,
   result,
   preview,
-  hasMemory,
-  angleMode,
-  isScientific,
-  onToggleAngleMode,
   error,
+  remainderMode,
+  onToggleRemainderMode,
+  onOpenVisualizer,
+  remainderResult,
 }) => {
   const [copied, setCopied] = useState(false);
+
+  const displayVal = result || preview || expression || '0';
+  const cleanVal = parseInt(displayVal.replace(/,/g, ''), 10);
+  const wordSpelling = !isNaN(cleanVal) && cleanVal >= 0 && cleanVal < 1000000 ? numberToWords(cleanVal) : '';
 
   const handleCopy = () => {
     const textToCopy = result || preview || expression || '0';
     if (navigator.clipboard) {
       navigator.clipboard.writeText(textToCopy);
       setCopied(true);
+      audioFeedback.playBubble(660);
       setTimeout(() => setCopied(false), 1800);
     }
   };
 
+  const handleSpeak = () => {
+    let textToSpeak = '';
+    if (result) {
+      textToSpeak = `${expression} equals ${result}`;
+    } else if (preview) {
+      textToSpeak = `${expression} equals ${preview}`;
+    } else if (expression) {
+      textToSpeak = expression;
+    } else {
+      textToSpeak = 'Zero';
+    }
+    audioFeedback.speakMath(textToSpeak);
+  };
+
   return (
     <div className={styles.displayContainer}>
-      <div className={styles.statusRow}>
-        <div className={styles.indicators}>
-          {hasMemory && <span className={styles.badge}>M</span>}
-          {isScientific && (
-            <button
-              onClick={onToggleAngleMode}
-              className={`${styles.badge} ${styles.badgeInteractive}`}
-              title="Click to toggle DEG / RAD"
-              type="button"
-            >
-              {angleMode}
-            </button>
-          )}
+      {/* Top Helper Bar */}
+      <div className={styles.topBar}>
+        <div className={styles.leftPills}>
+          {/* Remainder Division Toggle */}
+          <button
+            type="button"
+            onClick={() => {
+              onToggleRemainderMode();
+              audioFeedback.playBoing();
+            }}
+            className={`${styles.modePill} ${remainderMode ? styles.modePillActive : ''}`}
+            title="Toggle Grade 3 Remainder Mode (e.g. 17 ÷ 5 = 3 R 2)"
+          >
+            <span>➗ Remainder</span>
+            <strong>{remainderMode ? 'ON (R)' : 'OFF'}</strong>
+          </button>
+
+          {/* Visual Math Drawer Launcher */}
+          <button
+            type="button"
+            onClick={() => {
+              onOpenVisualizer();
+              audioFeedback.playBubble();
+            }}
+            className={styles.visualizerBtn}
+            title="View Visual Counters, Arrays & Place Value!"
+          >
+            <span>👀 See Blocks</span>
+          </button>
         </div>
 
-        <button
-          onClick={handleCopy}
-          className={styles.copyBtn}
-          title="Copy result to clipboard"
-          type="button"
-        >
-          {copied ? (
-            <span className={styles.copiedText}>✓ Copied</span>
-          ) : (
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
-          )}
-        </button>
+        <div className={styles.rightActions}>
+          {/* Speak Button */}
+          <button
+            type="button"
+            onClick={handleSpeak}
+            className={styles.actionBtn}
+            title="Listen to this equation out loud! 🗣️"
+            aria-label="Speak equation"
+          >
+            🗣️
+          </button>
+
+          {/* Copy Button */}
+          <button
+            type="button"
+            onClick={handleCopy}
+            className={styles.actionBtn}
+            title="Copy answer"
+            aria-label="Copy result"
+          >
+            {copied ? <span className={styles.copiedIcon}>✓</span> : '📋'}
+          </button>
+        </div>
       </div>
 
+      {/* Expression Row */}
       <div className={styles.expressionRow} title={expression || '0'}>
         <span>{expression || '\u00A0'}</span>
       </div>
 
+      {/* Main Result & Live Preview */}
       <div className={`${styles.resultRow} ${error ? styles.errorResult : ''}`}>
         {error ? (
-          <span className={styles.errorText}>{error}</span>
+          <div className={styles.errorContainer}>
+            <span className={styles.errorEmoji}>🙈</span>
+            <span className={styles.errorText}>{error}</span>
+          </div>
         ) : (
           <>
-            <span className={styles.mainResult}>{result || expression || '0'}</span>
-            {!result && preview && preview !== expression && (
-              <span className={styles.livePreview}>= {preview}</span>
+            <div className={styles.resultValueWrap}>
+              <span className={styles.mainResult}>{result || expression || '0'}</span>
+              {!result && preview && preview !== expression && (
+                <span className={styles.livePreview}>= {preview}</span>
+              )}
+            </div>
+
+            {/* If there's a remainder calculation, highlight it in Grade 3 style! */}
+            {remainderResult && remainderResult.remainder > 0 && (
+              <div className={styles.remainderBadge} title="Grade 3 Quotient & Remainder">
+                <span>Remainder:</span>
+                <strong>{remainderResult.remainder}</strong>
+              </div>
             )}
           </>
         )}
       </div>
+
+      {/* Word Spelling for Grade 3 Reading Practice */}
+      {wordSpelling && !error && (
+        <div className={styles.wordRow} title={`Word form: ${wordSpelling}`}>
+          <span className={styles.wordPrefix}>In words:</span>
+          <span className={styles.wordText}>&ldquo;{wordSpelling}&rdquo;</span>
+        </div>
+      )}
     </div>
   );
 };

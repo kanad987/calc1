@@ -2,6 +2,7 @@
 
 import React from 'react';
 import styles from './HistoryDrawer.module.css';
+import { audioFeedback } from '@/utils/audioFeedback';
 
 export interface HistoryItem {
   id: string;
@@ -32,32 +33,35 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
       <aside
         className={styles.drawer}
         onClick={(e) => e.stopPropagation()}
-        aria-label="Calculation History"
+        aria-label="My Math Adventure Log"
       >
         <div className={styles.header}>
           <div className={styles.titleRow}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <polyline points="12 6 12 12 16 14"></polyline>
-            </svg>
-            <h3>Calculation History</h3>
+            <span className={styles.titleIcon}>📜</span>
+            <div>
+              <h3>Math Adventure Log</h3>
+              <p className={styles.subtitle}>Your past math discoveries</p>
+            </div>
           </div>
           <div className={styles.headerActions}>
             {history.length > 0 && (
               <button
                 type="button"
-                onClick={onClear}
+                onClick={() => {
+                  audioFeedback.playClear();
+                  onClear();
+                }}
                 className={styles.clearBtn}
-                title="Clear all history"
+                title="Clear log"
               >
-                Clear
+                Clear Log 🧹
               </button>
             )}
             <button
               type="button"
               onClick={onClose}
               className={styles.closeBtn}
-              title="Close history"
+              title="Close log"
             >
               ✕
             </button>
@@ -67,9 +71,9 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
         <div className={styles.content}>
           {history.length === 0 ? (
             <div className={styles.emptyState}>
-              <div className={styles.emptyIcon}>⌛</div>
-              <p className={styles.emptyTitle}>No history yet</p>
-              <p className={styles.emptySubtitle}>Your previous calculations will appear here</p>
+              <div className={styles.emptyIcon}>⭐</div>
+              <p className={styles.emptyTitle}>No discoveries yet!</p>
+              <p className={styles.emptySubtitle}>Calculate numbers and your solved equations will appear here with stars!</p>
             </div>
           ) : (
             <div className={styles.list}>
@@ -77,16 +81,30 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
                 <div
                   key={item.id}
                   className={styles.item}
-                  onClick={() => onSelect(item)}
+                  onClick={() => {
+                    audioFeedback.playBubble();
+                    onSelect(item);
+                  }}
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => e.key === 'Enter' && onSelect(item)}
                 >
-                  <div className={styles.itemExpr}>{item.expression} =</div>
-                  <div className={styles.itemResult}>{item.result}</div>
-                  <div className={styles.itemTime}>
-                    {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  <div className={styles.starBadge}>⭐</div>
+                  <div className={styles.itemContent}>
+                    <div className={styles.itemExpr}>{item.expression} =</div>
+                    <div className={styles.itemResult}>{item.result}</div>
                   </div>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      audioFeedback.speakMath(`${item.expression} equals ${item.result}`);
+                    }}
+                    className={styles.speakBtn}
+                    title="Speak equation aloud"
+                  >
+                    🗣️
+                  </button>
                 </div>
               ))}
             </div>

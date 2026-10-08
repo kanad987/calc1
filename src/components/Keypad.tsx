@@ -9,8 +9,6 @@ interface KeypadProps {
   onBackspace: () => void;
   onCalculate: () => void;
   onToggleSign: () => void;
-  onMemory: (action: 'MC' | 'MR' | 'M+' | 'M-' | 'MS') => void;
-  isScientific: boolean;
   activeKey?: string | null;
 }
 
@@ -20,239 +18,217 @@ export const Keypad: React.FC<KeypadProps> = ({
   onBackspace,
   onCalculate,
   onToggleSign,
-  onMemory,
-  isScientific,
   activeKey,
 }) => {
   const isKeyActive = (key: string) => activeKey === key;
 
   return (
     <div className={styles.keypadContainer}>
-      {/* Memory Bar */}
-      <div className={styles.memoryBar}>
-        <button type="button" onClick={() => onMemory('MC')} className={styles.memBtn} title="Memory Clear">MC</button>
-        <button type="button" onClick={() => onMemory('MR')} className={styles.memBtn} title="Memory Recall">MR</button>
-        <button type="button" onClick={() => onMemory('M+')} className={styles.memBtn} title="Memory Add">M+</button>
-        <button type="button" onClick={() => onMemory('M-')} className={styles.memBtn} title="Memory Subtract">M-</button>
-        <button type="button" onClick={() => onMemory('MS')} className={styles.memBtn} title="Memory Store">MS</button>
-      </div>
+      <div className={styles.grid}>
+        {/* ROW 1 */}
+        <button
+          type="button"
+          onClick={onClear}
+          className={`${styles.keyBtn} ${styles.clearBtn} ${isKeyActive('Escape') || isKeyActive('c') ? styles.activeKey : ''}`}
+          title="Clear all (Esc / C)"
+        >
+          <span className={styles.btnIcon}>🧹</span>
+          <span className={styles.btnLabel}>AC</span>
+        </button>
 
-      <div className={`${styles.mainGrid} ${isScientific ? styles.scientificGrid : ''}`}>
-        {/* Scientific Section */}
-        {isScientific && (
-          <div className={styles.sciSection}>
-            <button type="button" onClick={() => onInput('sin(')} className={styles.sciBtn}>sin</button>
-            <button type="button" onClick={() => onInput('cos(')} className={styles.sciBtn}>cos</button>
-            <button type="button" onClick={() => onInput('tan(')} className={styles.sciBtn}>tan</button>
-            <button type="button" onClick={() => onInput('asin(')} className={styles.sciBtn}>sin⁻¹</button>
-            <button type="button" onClick={() => onInput('acos(')} className={styles.sciBtn}>cos⁻¹</button>
-            <button type="button" onClick={() => onInput('atan(')} className={styles.sciBtn}>tan⁻¹</button>
+        <button
+          type="button"
+          onClick={onBackspace}
+          className={`${styles.keyBtn} ${styles.backspaceBtn} ${isKeyActive('Backspace') ? styles.activeKey : ''}`}
+          title="Delete last number (Backspace)"
+        >
+          <span className={styles.btnLabel}>⌫</span>
+        </button>
 
-            <button type="button" onClick={() => onInput('ln(')} className={styles.sciBtn}>ln</button>
-            <button type="button" onClick={() => onInput('log(')} className={styles.sciBtn}>log</button>
-            <button type="button" onClick={() => onInput('^')} className={styles.sciBtn}>xʸ</button>
-            <button type="button" onClick={() => onInput('^2')} className={styles.sciBtn}>x²</button>
-            <button type="button" onClick={() => onInput('^3')} className={styles.sciBtn}>x³</button>
-            <button type="button" onClick={() => onInput('sqrt(')} className={styles.sciBtn}>√x</button>
+        <button
+          type="button"
+          onClick={() => onInput('(')}
+          className={`${styles.keyBtn} ${styles.parenBtn} ${isKeyActive('(') ? styles.activeKey : ''}`}
+          title="Open bracket"
+        >
+          <span className={styles.btnLabel}>(</span>
+        </button>
 
-            <button type="button" onClick={() => onInput('cbrt(')} className={styles.sciBtn}>∛x</button>
-            <button type="button" onClick={() => onInput('!')} className={styles.sciBtn}>n!</button>
-            <button type="button" onClick={() => onInput('π')} className={styles.sciBtn}>π</button>
-            <button type="button" onClick={() => onInput('e')} className={styles.sciBtn}>e</button>
-            <button type="button" onClick={() => onInput('abs(')} className={styles.sciBtn}>|x|</button>
-            <button type="button" onClick={() => onInput('exp(')} className={styles.sciBtn}>eˣ</button>
-          </div>
-        )}
+        <button
+          type="button"
+          onClick={() => onInput(')')}
+          className={`${styles.keyBtn} ${styles.parenBtn} ${isKeyActive(')') ? styles.activeKey : ''}`}
+          title="Close bracket"
+        >
+          <span className={styles.btnLabel}>)</span>
+        </button>
 
-        {/* Standard Section */}
-        <div className={styles.standardSection}>
-          {/* Row 1 */}
-          <button
-            type="button"
-            onClick={onClear}
-            className={`${styles.btn} ${styles.actionBtn} ${isKeyActive('Escape') || isKeyActive('c') ? styles.activeKey : ''}`}
-            title="Clear (Escape / C)"
-          >
-            AC
-          </button>
-          <button
-            type="button"
-            onClick={onBackspace}
-            className={`${styles.btn} ${styles.fnBtn} ${isKeyActive('Backspace') ? styles.activeKey : ''}`}
-            title="Backspace (Backspace)"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
-              <line x1="18" y1="9" x2="12" y2="15"></line>
-              <line x1="12" y1="9" x2="18" y2="15"></line>
-            </svg>
-          </button>
-          <button
-            type="button"
-            onClick={() => onInput('(')}
-            className={`${styles.btn} ${styles.fnBtn} ${isKeyActive('(') ? styles.activeKey : ''}`}
-          >
-            (
-          </button>
-          <button
-            type="button"
-            onClick={() => onInput(')')}
-            className={`${styles.btn} ${styles.fnBtn} ${isKeyActive(')') ? styles.activeKey : ''}`}
-          >
-            )
-          </button>
-          <button
-            type="button"
-            onClick={() => onInput('÷')}
-            className={`${styles.btn} ${styles.opBtn} ${isKeyActive('/') || isKeyActive('÷') ? styles.activeKey : ''}`}
-          >
-            ÷
-          </button>
+        <button
+          type="button"
+          onClick={() => onInput('÷')}
+          className={`${styles.keyBtn} ${styles.opBtn} ${styles.divideBtn} ${isKeyActive('/') || isKeyActive('÷') ? styles.activeKey : ''}`}
+          title="Divide (÷)"
+        >
+          <span className={styles.btnLabel}>÷</span>
+        </button>
 
-          {/* Row 2 */}
-          <button
-            type="button"
-            onClick={() => onInput('7')}
-            className={`${styles.btn} ${styles.numBtn} ${isKeyActive('7') ? styles.activeKey : ''}`}
-          >
-            7
-          </button>
-          <button
-            type="button"
-            onClick={() => onInput('8')}
-            className={`${styles.btn} ${styles.numBtn} ${isKeyActive('8') ? styles.activeKey : ''}`}
-          >
-            8
-          </button>
-          <button
-            type="button"
-            onClick={() => onInput('9')}
-            className={`${styles.btn} ${styles.numBtn} ${isKeyActive('9') ? styles.activeKey : ''}`}
-          >
-            9
-          </button>
-          <button
-            type="button"
-            onClick={() => onInput('%')}
-            className={`${styles.btn} ${styles.fnBtn} ${isKeyActive('%') ? styles.activeKey : ''}`}
-          >
-            %
-          </button>
-          <button
-            type="button"
-            onClick={() => onInput('×')}
-            className={`${styles.btn} ${styles.opBtn} ${isKeyActive('*') || isKeyActive('×') ? styles.activeKey : ''}`}
-          >
-            ×
-          </button>
+        {/* ROW 2 */}
+        <button
+          type="button"
+          onClick={() => onInput('7')}
+          className={`${styles.keyBtn} ${styles.numBtn} ${isKeyActive('7') ? styles.activeKey : ''}`}
+        >
+          <span className={styles.btnLabel}>7</span>
+        </button>
 
-          {/* Row 3 */}
-          <button
-            type="button"
-            onClick={() => onInput('4')}
-            className={`${styles.btn} ${styles.numBtn} ${isKeyActive('4') ? styles.activeKey : ''}`}
-          >
-            4
-          </button>
-          <button
-            type="button"
-            onClick={() => onInput('5')}
-            className={`${styles.btn} ${styles.numBtn} ${isKeyActive('5') ? styles.activeKey : ''}`}
-          >
-            5
-          </button>
-          <button
-            type="button"
-            onClick={() => onInput('6')}
-            className={`${styles.btn} ${styles.numBtn} ${isKeyActive('6') ? styles.activeKey : ''}`}
-          >
-            6
-          </button>
-          <button
-            type="button"
-            onClick={() => onInput('1/(')}
-            className={`${styles.btn} ${styles.fnBtn}`}
-            title="Reciprocal 1/x"
-          >
-            ⅟x
-          </button>
-          <button
-            type="button"
-            onClick={() => onInput('−')}
-            className={`${styles.btn} ${styles.opBtn} ${isKeyActive('-') || isKeyActive('−') ? styles.activeKey : ''}`}
-          >
-            −
-          </button>
+        <button
+          type="button"
+          onClick={() => onInput('8')}
+          className={`${styles.keyBtn} ${styles.numBtn} ${isKeyActive('8') ? styles.activeKey : ''}`}
+        >
+          <span className={styles.btnLabel}>8</span>
+        </button>
 
-          {/* Row 4 */}
-          <button
-            type="button"
-            onClick={() => onInput('1')}
-            className={`${styles.btn} ${styles.numBtn} ${isKeyActive('1') ? styles.activeKey : ''}`}
-          >
-            1
-          </button>
-          <button
-            type="button"
-            onClick={() => onInput('2')}
-            className={`${styles.btn} ${styles.numBtn} ${isKeyActive('2') ? styles.activeKey : ''}`}
-          >
-            2
-          </button>
-          <button
-            type="button"
-            onClick={() => onInput('3')}
-            className={`${styles.btn} ${styles.numBtn} ${isKeyActive('3') ? styles.activeKey : ''}`}
-          >
-            3
-          </button>
-          <button
-            type="button"
-            onClick={() => onInput('sqrt(')}
-            className={`${styles.btn} ${styles.fnBtn}`}
-          >
-            √
-          </button>
-          <button
-            type="button"
-            onClick={() => onInput('+')}
-            className={`${styles.btn} ${styles.opBtn} ${isKeyActive('+') ? styles.activeKey : ''}`}
-          >
-            +
-          </button>
+        <button
+          type="button"
+          onClick={() => onInput('9')}
+          className={`${styles.keyBtn} ${styles.numBtn} ${isKeyActive('9') ? styles.activeKey : ''}`}
+        >
+          <span className={styles.btnLabel}>9</span>
+        </button>
 
-          {/* Row 5 */}
-          <button
-            type="button"
-            onClick={onToggleSign}
-            className={`${styles.btn} ${styles.fnBtn}`}
-            title="Toggle Positive/Negative"
-          >
-            ±
-          </button>
-          <button
-            type="button"
-            onClick={() => onInput('0')}
-            className={`${styles.btn} ${styles.numBtn} ${isKeyActive('0') ? styles.activeKey : ''}`}
-          >
-            0
-          </button>
-          <button
-            type="button"
-            onClick={() => onInput('.')}
-            className={`${styles.btn} ${styles.numBtn} ${isKeyActive('.') ? styles.activeKey : ''}`}
-          >
-            .
-          </button>
-          <button
-            type="button"
-            onClick={onCalculate}
-            className={`${styles.btn} ${styles.equalsBtn} ${isKeyActive('Enter') || isKeyActive('=') ? styles.activeKey : ''}`}
-            title="Calculate (Enter / =)"
-          >
-            =
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => onInput(' R ')}
+          className={`${styles.keyBtn} ${styles.remainderBtn}`}
+          title="Grade 3 Remainder Division (e.g. 17 R 5)"
+        >
+          <span className={styles.remainderPill}>Rem</span>
+          <span className={styles.btnLabel}>R</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onInput('×')}
+          className={`${styles.keyBtn} ${styles.opBtn} ${styles.multiplyBtn} ${isKeyActive('*') || isKeyActive('×') ? styles.activeKey : ''}`}
+          title="Multiply (×)"
+        >
+          <span className={styles.btnLabel}>×</span>
+        </button>
+
+        {/* ROW 3 */}
+        <button
+          type="button"
+          onClick={() => onInput('4')}
+          className={`${styles.keyBtn} ${styles.numBtn} ${isKeyActive('4') ? styles.activeKey : ''}`}
+        >
+          <span className={styles.btnLabel}>4</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onInput('5')}
+          className={`${styles.keyBtn} ${styles.numBtn} ${isKeyActive('5') ? styles.activeKey : ''}`}
+        >
+          <span className={styles.btnLabel}>5</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onInput('6')}
+          className={`${styles.keyBtn} ${styles.numBtn} ${isKeyActive('6') ? styles.activeKey : ''}`}
+        >
+          <span className={styles.btnLabel}>6</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onInput('%')}
+          className={`${styles.keyBtn} ${styles.parenBtn} ${isKeyActive('%') ? styles.activeKey : ''}`}
+          title="Percent (%)"
+        >
+          <span className={styles.btnLabel}>%</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onInput('−')}
+          className={`${styles.keyBtn} ${styles.opBtn} ${styles.minusBtn} ${isKeyActive('-') || isKeyActive('−') ? styles.activeKey : ''}`}
+          title="Minus (−)"
+        >
+          <span className={styles.btnLabel}>−</span>
+        </button>
+
+        {/* ROW 4 */}
+        <button
+          type="button"
+          onClick={() => onInput('1')}
+          className={`${styles.keyBtn} ${styles.numBtn} ${isKeyActive('1') ? styles.activeKey : ''}`}
+        >
+          <span className={styles.btnLabel}>1</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onInput('2')}
+          className={`${styles.keyBtn} ${styles.numBtn} ${isKeyActive('2') ? styles.activeKey : ''}`}
+        >
+          <span className={styles.btnLabel}>2</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onInput('3')}
+          className={`${styles.keyBtn} ${styles.numBtn} ${isKeyActive('3') ? styles.activeKey : ''}`}
+        >
+          <span className={styles.btnLabel}>3</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={onToggleSign}
+          className={`${styles.keyBtn} ${styles.parenBtn}`}
+          title="Positive / Negative (±)"
+        >
+          <span className={styles.btnLabel}>±</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onInput('+')}
+          className={`${styles.keyBtn} ${styles.opBtn} ${styles.plusBtn} ${isKeyActive('+') ? styles.activeKey : ''}`}
+          title="Plus (+)"
+        >
+          <span className={styles.btnLabel}>+</span>
+        </button>
+
+        {/* ROW 5 */}
+        <button
+          type="button"
+          onClick={() => onInput('0')}
+          className={`${styles.keyBtn} ${styles.numBtn} ${styles.zeroBtn} ${isKeyActive('0') ? styles.activeKey : ''}`}
+        >
+          <span className={styles.btnLabel}>0</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onInput('.')}
+          className={`${styles.keyBtn} ${styles.numBtn} ${isKeyActive('.') ? styles.activeKey : ''}`}
+          title="Decimal dot"
+        >
+          <span className={styles.btnLabel}>.</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={onCalculate}
+          className={`${styles.keyBtn} ${styles.equalsBtn} ${isKeyActive('Enter') || isKeyActive('=') ? styles.activeKey : ''}`}
+          title="Equals! Get answer & earn stars ⭐"
+        >
+          <span className={styles.starIcon}>⭐</span>
+          <span className={styles.btnLabel}>=</span>
+        </button>
       </div>
     </div>
   );
