@@ -9,6 +9,8 @@ import { UnitConverterModal } from './UnitConverterModal';
 import { evaluateMathExpression, AngleMode, formatNumber } from '@/utils/mathEngine';
 import { audioFeedback } from '@/utils/audioFeedback';
 
+export type Theme = 'dark' | 'light' | 'cyberpunk' | 'tokyo-neon';
+
 export const Calculator: React.FC = () => {
   const [expression, setExpression] = useState<string>('');
   const [result, setResult] = useState<string>('');
@@ -23,7 +25,7 @@ export const Calculator: React.FC = () => {
   const [isHistoryOpen, setIsHistoryOpen] = useState<boolean>(false);
   const [isConverterOpen, setIsConverterOpen] = useState<boolean>(false);
   const [isSoundEnabled, setIsSoundEnabled] = useState<boolean>(true);
-  const [theme, setTheme] = useState<'dark' | 'light' | 'cyberpunk'>('dark');
+  const [theme, setTheme] = useState<Theme>('dark');
   const [activeKey, setActiveKey] = useState<string | null>(null);
 
   // Initialize from LocalStorage
@@ -32,7 +34,7 @@ export const Calculator: React.FC = () => {
       const savedHistory = localStorage.getItem('calc_history');
       if (savedHistory) setHistory(JSON.parse(savedHistory));
 
-      const savedTheme = localStorage.getItem('calc_theme') as 'dark' | 'light' | 'cyberpunk';
+      const savedTheme = localStorage.getItem('calc_theme') as Theme;
       if (savedTheme) {
         setTheme(savedTheme);
         document.documentElement.setAttribute('data-theme', savedTheme);
@@ -50,7 +52,7 @@ export const Calculator: React.FC = () => {
   }, []);
 
   // Update Theme
-  const handleThemeChange = (newTheme: 'dark' | 'light' | 'cyberpunk') => {
+  const handleThemeChange = (newTheme: Theme) => {
     setTheme(newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
     try {
@@ -302,7 +304,7 @@ export const Calculator: React.FC = () => {
             </div>
             <div className={styles.brandText}>
               <h1 className={styles.appName}>QuantumCalc</h1>
-              <span className={styles.appBadge}>v2.1 • TypeScript</span>
+              <span className={styles.appBadge}>v2.2 • TypeScript</span>
             </div>
           </div>
 
@@ -346,13 +348,14 @@ export const Calculator: React.FC = () => {
             {/* Theme Selector */}
             <select
               value={theme}
-              onChange={(e) => handleThemeChange(e.target.value as 'dark' | 'light' | 'cyberpunk')}
+              onChange={(e) => handleThemeChange(e.target.value as Theme)}
               className={styles.themeSelect}
               aria-label="Select Theme"
             >
               <option value="dark">🌙 Dark</option>
               <option value="light">☀️ Light</option>
               <option value="cyberpunk">⚡ Cyber</option>
+              <option value="tokyo-neon">🌸 Tokyo Neon</option>
             </select>
           </div>
         </header>
