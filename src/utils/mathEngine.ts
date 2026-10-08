@@ -139,7 +139,7 @@ export function evaluateMathExpression(
       E: Math.E,
     };
 
-    let executableExpr = sanitized
+    const executableExpr = sanitized
       .replace(/\bsin\(/g, 'context.sin(')
       .replace(/\bcos\(/g, 'context.cos(')
       .replace(/\btan\(/g, 'context.tan(')

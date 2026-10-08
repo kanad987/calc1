@@ -11,7 +11,7 @@ interface VisualMathDrawerProps {
   result: string;
 }
 
-type CounterIcon = '⭐' | '🍎' | '🚀' | '🧁';
+type CounterIcon = '⭐' | '🍎' | '🚀' | '🧁' | '🌴';
 
 export const VisualMathDrawer: React.FC<VisualMathDrawerProps> = ({
   isOpen,
@@ -43,7 +43,7 @@ export const VisualMathDrawer: React.FC<VisualMathDrawerProps> = ({
   const addA = addMatch ? parseInt(addMatch[1], 10) : null;
   const addB = addMatch ? parseInt(addMatch[2], 10) : null;
 
-  const icons: CounterIcon[] = ['⭐', '🍎', '🚀', '🧁'];
+  const icons: CounterIcon[] = ['⭐', '🍎', '🚀', '🧁', '🌴'];
 
   return (
     <div className={styles.overlay} onClick={onClose}>

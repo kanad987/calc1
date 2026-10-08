@@ -195,6 +195,56 @@
   --btn-clear-shadow: #b91c1c;
 }
 
+[data-theme='jungle'] {
+  /* Lush Tropical Jungle Safari */
+  --bg-main: #042416;
+  --bg-gradient: radial-gradient(circle at 40% 15%, #0d4a2d 0%, #062e1c 50%, #021a0f 100%);
+  --glass-bg: rgba(6, 42, 26, 0.92);
+  --glass-border: rgba(34, 197, 94, 0.38);
+  --glass-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), 0 0 35px rgba(34, 197, 94, 0.25);
+
+  --kid-border: rgba(74, 222, 128, 0.4);
+  --kid-card-subtle: rgba(10, 56, 35, 0.82);
+  --kid-display-bg: rgba(3, 28, 17, 0.9);
+  --kid-badge-bg: #16a34a;
+
+  --text-primary: #f0fdf4;
+  --text-secondary: #bbf7d0;
+  --text-muted: #86efac;
+  --text-accent: #facc15;
+
+  --btn-num-bg: #0f482d;
+  --btn-num-shadow: #072e1c;
+  --btn-num-text: #ffffff;
+
+  --btn-divide-bg: #0d9488;
+  --btn-divide-shadow: #0f766e;
+
+  --btn-multiply-bg: #9333ea;
+  --btn-multiply-shadow: #7e22ce;
+
+  --btn-minus-bg: #ea580c;
+  --btn-minus-shadow: #9a3412;
+
+  --btn-plus-bg: #22c55e;
+  --btn-plus-shadow: #15803d;
+
+  --btn-clear-bg: #ef4444;
+  --btn-clear-shadow: #b91c1c;
+}
+
+[data-theme='jungle'] .orb-1 {
+  background: #16a34a;
+}
+
+[data-theme='jungle'] .orb-2 {
+  background: #eab308;
+}
+
+[data-theme='jungle'] .orb-3 {
+  background: #06b6d4;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Aahee's Calculator 🌟
+A fun, tactile, and interactive Grade 3 Math Calculator and Learning Explorer built with Next.js and React.
+
 
 ## Getting Started
 

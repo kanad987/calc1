@@ -14,6 +14,16 @@ interface MathQuestModalProps {
 
 type QuizCategory = 'all' | 'multiplication' | 'division' | 'addition' | 'subtraction';
 
+const DEFAULT_PROBLEM: Grade3QuizProblem = {
+  id: 'default-grade3-prob',
+  question: '7 × 8 = ?',
+  answer: 56,
+  options: [48, 54, 56, 64],
+  category: 'multiplication',
+  hint: 'Think of 7 groups of 8 (or 8 × 7)',
+  badge: '✖️ Times Master',
+};
+
 export const MathQuestModal: React.FC<MathQuestModalProps> = ({
   isOpen,
   onClose,
@@ -21,15 +31,16 @@ export const MathQuestModal: React.FC<MathQuestModalProps> = ({
   triggerCelebration,
 }) => {
   const [category, setCategory] = useState<QuizCategory>('all');
-  const [currentProblem, setCurrentProblem] = useState<Grade3QuizProblem | null>(null);
+  const [currentProblem, setCurrentProblem] = useState<Grade3QuizProblem>(DEFAULT_PROBLEM);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
   const [streak, setStreak] = useState<number>(0);
   const [bestStreak, setBestStreak] = useState<number>(0);
   const [sessionStars, setSessionStars] = useState<number>(0);
 
-  const loadNewProblem = useCallback(() => {
-    const forced = category === 'all' ? undefined : category;
+  const loadNewProblem = useCallback((targetCat?: QuizCategory) => {
+    const activeCat = targetCat ?? category;
+    const forced = activeCat === 'all' ? undefined : activeCat;
     const prob = generateGrade3Problem(forced);
     setCurrentProblem(prob);
     setSelectedAnswer(null);
@@ -38,7 +49,9 @@ export const MathQuestModal: React.FC<MathQuestModalProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      loadNewProblem();
+      queueMicrotask(() => {
+        loadNewProblem();
+      });
     }
   }, [isOpen, loadNewProblem]);
 
@@ -97,6 +110,7 @@ export const MathQuestModal: React.FC<MathQuestModalProps> = ({
               type="button"
               onClick={() => {
                 setCategory(cat);
+                loadNewProblem(cat);
                 audioFeedback.playBubble();
               }}
               className={`${styles.catTab} ${category === cat ? styles.catTabActive : ''}`}

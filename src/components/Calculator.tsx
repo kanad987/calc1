@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import styles from './Calculator.module.css';
 import { Display } from './Display';
 import { Keypad } from './Keypad';
@@ -14,12 +14,11 @@ import { Confetti } from './Confetti';
 import { evaluateMathExpression, formatNumber } from '@/utils/mathEngine';
 import { audioFeedback } from '@/utils/audioFeedback';
 
-export type KidTheme = 'rainbow' | 'space' | 'candy' | 'dino';
+export type KidTheme = 'rainbow' | 'space' | 'candy' | 'dino' | 'jungle';
 
 export const Calculator: React.FC = () => {
   const [expression, setExpression] = useState<string>('');
   const [result, setResult] = useState<string>('');
-  const [preview, setPreview] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [remainderMode, setRemainderMode] = useState<boolean>(true); // Grade 3 default!
   const [remainderResult, setRemainderResult] = useState<{ quotient: number; remainder: number; text: string } | undefined>(undefined);
@@ -36,18 +35,21 @@ export const Calculator: React.FC = () => {
   const [theme, setTheme] = useState<KidTheme>('rainbow');
   const [activeKey, setActiveKey] = useState<string | null>(null);
   const [starsCount, setStarsCount] = useState<number>(10);
-  const [mascotMessage, setMascotMessage] = useState<string>('Welcome, Grade 3 Math Superstar! 🌟');
+  const [mascotMessage, setMascotMessage] = useState<string>("Welcome, Aahee! Let's explore math! 🌟");
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
 
   // Initialize from LocalStorage
   useEffect(() => {
     try {
       const savedHistory = localStorage.getItem('calc_history');
-      if (savedHistory) setHistory(JSON.parse(savedHistory));
+      if (savedHistory) {
+        const parsed = JSON.parse(savedHistory);
+        queueMicrotask(() => setHistory(parsed));
+      }
 
       const savedTheme = localStorage.getItem('calc_kid_theme') as KidTheme;
       if (savedTheme) {
-        setTheme(savedTheme);
+        queueMicrotask(() => setTheme(savedTheme));
         document.documentElement.setAttribute('data-theme', savedTheme);
       } else {
         document.documentElement.setAttribute('data-theme', 'rainbow');
@@ -55,20 +57,21 @@ export const Calculator: React.FC = () => {
 
       const savedStars = localStorage.getItem('calc_stars');
       if (savedStars) {
-        setStarsCount(parseInt(savedStars, 10));
+        const parsedStars = parseInt(savedStars, 10);
+        queueMicrotask(() => setStarsCount(parsedStars));
       }
 
       const savedSound = localStorage.getItem('calc_sound');
       if (savedSound !== null) {
         const soundOn = savedSound === 'true';
-        setIsSoundEnabled(soundOn);
+        queueMicrotask(() => setIsSoundEnabled(soundOn));
         audioFeedback.soundEnabled = soundOn;
       }
 
       const savedSpeech = localStorage.getItem('calc_speech');
       if (savedSpeech !== null) {
         const speechOn = savedSpeech === 'true';
-        setIsSpeechEnabled(speechOn);
+        queueMicrotask(() => setIsSpeechEnabled(speechOn));
         audioFeedback.speechEnabled = speechOn;
       }
     } catch {
@@ -132,25 +135,20 @@ export const Calculator: React.FC = () => {
     setShowConfetti(true);
   }, []);
 
-  // Live expression preview
-  useEffect(() => {
-    if (!expression || expression.trim() === '') {
-      setPreview('');
-      setRemainderResult(undefined);
-      setError(null);
-      return;
+  // Live calculation preview computed directly from expression & remainderMode
+  const { preview, liveRemainder } = useMemo(() => {
+    if (result || !expression || expression.trim() === '') {
+      return { preview: '', liveRemainder: undefined };
     }
-
     const validEnding = /[0-9)πe!]$/.test(expression.trim());
     if (validEnding) {
       const evalRes = evaluateMathExpression(expression, 'DEG', remainderMode);
       if (evalRes.success && evalRes.formatted) {
-        setPreview(evalRes.formatted);
-        setRemainderResult(evalRes.remainderResult);
-        setError(null);
+        return { preview: evalRes.formatted, liveRemainder: evalRes.remainderResult };
       }
     }
-  }, [expression, remainderMode]);
+    return { preview: '', liveRemainder: undefined };
+  }, [expression, remainderMode, result]);
 
   // Handle number or operator inputs
   const handleInput = useCallback((char: string) => {
@@ -160,10 +158,10 @@ export const Calculator: React.FC = () => {
     if (['+', '−', '×', '÷', '%'].includes(char.trim())) {
       audioFeedback.playBoing();
       const mascotQuotes = [
-        'Awesome operation! 🚀',
-        'Keep going, superstar! ⭐',
+        'Awesome operation, Aahee! 🚀',
+        'Keep going, superstar Aahee! ⭐',
         'Math power activated! 💥',
-        'You are doing great! 🌟',
+        'You are doing great, Aahee! 🌟',
       ];
       setMascotMessage(mascotQuotes[Math.floor(Math.random() * mascotQuotes.length)]);
     } else {
@@ -199,7 +197,6 @@ export const Calculator: React.FC = () => {
     audioFeedback.playClear();
     setExpression('');
     setResult('');
-    setPreview('');
     setRemainderResult(undefined);
     setError(null);
     setMascotMessage('Clean chalkboard! Ready for a new puzzle! 🧹');
@@ -233,17 +230,16 @@ export const Calculator: React.FC = () => {
       triggerCelebration();
       setResult(evalRes.formatted);
       setRemainderResult(evalRes.remainderResult);
-      setPreview('');
       setError(null);
 
       // Award a star for calculating!
       addStars(1);
 
       const victoryMessages = [
-        'Brilliant! +1 Star earned! ⭐',
-        'Awesome answer! You rock! 🎸',
+        'Brilliant, Aahee! +1 Star earned! ⭐',
+        'Awesome answer! You rock, Aahee! 🎸',
         'Grade 3 Champion! 🏆',
-        'Math wizardry at work! 🧙‍♂️',
+        'Math wizardry at work, Aahee! 🧙‍♂️',
       ];
       setMascotMessage(victoryMessages[Math.floor(Math.random() * victoryMessages.length)]);
 
@@ -350,11 +346,11 @@ export const Calculator: React.FC = () => {
         {/* Top Navbar Toolbar */}
         <header className={styles.toolbar}>
           <div className={styles.brandTitle}>
-            <div className={styles.brandLogo} title="Grade 3 Math Explorer">
+            <div className={styles.brandLogo} title="Aahee's Calculator">
               <span>🌟</span>
             </div>
             <div className={styles.brandText}>
-              <h1 className={styles.appName}>MathStars</h1>
+              <h1 className={styles.appName}>{"Aahee's Calculator"}</h1>
               <span className={styles.appBadge}>Grade 3 Explorer • Age 8–9</span>
             </div>
           </div>
@@ -410,6 +406,7 @@ export const Calculator: React.FC = () => {
               <option value="space">🚀 Space</option>
               <option value="candy">🍭 Candy</option>
               <option value="dino">🦕 Dino</option>
+              <option value="jungle">🌴 Jungle</option>
             </select>
           </div>
         </header>
@@ -470,7 +467,7 @@ export const Calculator: React.FC = () => {
           remainderMode={remainderMode}
           onToggleRemainderMode={() => setRemainderMode((prev) => !prev)}
           onOpenVisualizer={() => setIsVisualizerOpen(true)}
-          remainderResult={remainderResult}
+          remainderResult={result ? remainderResult : liveRemainder}
         />
 
         {/* Calculator Keypad */}
