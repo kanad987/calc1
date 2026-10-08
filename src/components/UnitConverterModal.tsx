@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import styles from './UnitConverterModal.module.css';
 import { UNIT_CATEGORIES, convertUnits } from '@/utils/unitConverter';
+import { audioFeedback } from '@/utils/audioFeedback';
 
 interface UnitConverterModalProps {
   isOpen: boolean;
@@ -29,6 +30,7 @@ export const UnitConverterModal: React.FC<UnitConverterModalProps> = ({
 
   const handleCategoryChange = (catId: string) => {
     setSelectedCatId(catId);
+    audioFeedback.playBubble();
     const newCat = UNIT_CATEGORIES.find((c) => c.id === catId);
     if (newCat && newCat.units.length > 0) {
       setFromUnitId(newCat.units[0].id);
@@ -37,6 +39,7 @@ export const UnitConverterModal: React.FC<UnitConverterModalProps> = ({
   };
 
   const handleSwap = () => {
+    audioFeedback.playBoing();
     const temp = fromUnitId;
     setFromUnitId(toUnitId);
     setToUnitId(temp);
@@ -47,14 +50,11 @@ export const UnitConverterModal: React.FC<UnitConverterModalProps> = ({
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <div className={styles.header}>
           <div className={styles.titleRow}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="16 3 21 3 21 8"></polyline>
-              <line x1="4" y1="20" x2="21" y2="3"></line>
-              <polyline points="21 16 21 21 16 21"></polyline>
-              <line x1="15" y1="15" x2="21" y2="21"></line>
-              <line x1="4" y1="4" x2="9" y2="9"></line>
-            </svg>
-            <h3>Unit Converter</h3>
+            <span className={styles.titleEmoji}>📏</span>
+            <div>
+              <h3 className={styles.title}>Measurement Explorer</h3>
+              <p className={styles.subtitle}>Grade 3 Units & Comparisons!</p>
+            </div>
           </div>
           <button type="button" onClick={onClose} className={styles.closeBtn}>✕</button>
         </div>
@@ -68,15 +68,22 @@ export const UnitConverterModal: React.FC<UnitConverterModalProps> = ({
               onClick={() => handleCategoryChange(cat.id)}
               className={`${styles.catTab} ${selectedCatId === cat.id ? styles.activeTab : ''}`}
             >
-              {cat.name}
+              <span>{cat.emoji}</span>
+              <span>{cat.name}</span>
             </button>
           ))}
+        </div>
+
+        {/* Fun Fact Badge */}
+        <div className={styles.funFactBox}>
+          <span className={styles.factIcon}>💡</span>
+          <span className={styles.factText}>{activeCat.funFact}</span>
         </div>
 
         <div className={styles.converterBody}>
           {/* From field */}
           <div className={styles.inputGroup}>
-            <label className={styles.label}>From</label>
+            <label className={styles.label}>I have:</label>
             <div className={styles.inputRow}>
               <input
                 type="number"
@@ -101,13 +108,13 @@ export const UnitConverterModal: React.FC<UnitConverterModalProps> = ({
 
           <div className={styles.swapRow}>
             <button type="button" onClick={handleSwap} className={styles.swapBtn} title="Swap units">
-              ⇅ Swap
+              🔄 Swap
             </button>
           </div>
 
           {/* To field */}
           <div className={styles.inputGroup}>
-            <label className={styles.label}>To</label>
+            <label className={styles.label}>That equals:</label>
             <div className={styles.inputRow}>
               <div className={styles.resultField}>{converted}</div>
               <select
@@ -129,12 +136,13 @@ export const UnitConverterModal: React.FC<UnitConverterModalProps> = ({
           <button
             type="button"
             onClick={() => {
+              audioFeedback.playFanfare();
               onInsertResult(`${converted}`);
               onClose();
             }}
             className={styles.insertBtn}
           >
-            Use in Calculator
+            Put in Calculator ➕
           </button>
         </div>
       </div>

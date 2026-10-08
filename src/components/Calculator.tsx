@@ -6,27 +6,38 @@ import { Display } from './Display';
 import { Keypad } from './Keypad';
 import { HistoryDrawer, HistoryItem } from './HistoryDrawer';
 import { UnitConverterModal } from './UnitConverterModal';
-import { evaluateMathExpression, AngleMode, formatNumber } from '@/utils/mathEngine';
+import { VisualMathDrawer } from './VisualMathDrawer';
+import { TimesTableModal } from './TimesTableModal';
+import { MathQuestModal } from './MathQuestModal';
+import { MascotBuddy } from './MascotBuddy';
+import { Confetti } from './Confetti';
+import { evaluateMathExpression, formatNumber } from '@/utils/mathEngine';
 import { audioFeedback } from '@/utils/audioFeedback';
 
-export type Theme = 'dark' | 'light' | 'cyberpunk' | 'tokyo-neon';
+export type KidTheme = 'rainbow' | 'space' | 'candy' | 'dino';
 
 export const Calculator: React.FC = () => {
   const [expression, setExpression] = useState<string>('');
   const [result, setResult] = useState<string>('');
   const [preview, setPreview] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
+  const [remainderMode, setRemainderMode] = useState<boolean>(true); // Grade 3 default!
+  const [remainderResult, setRemainderResult] = useState<{ quotient: number; remainder: number; text: string } | undefined>(undefined);
 
-  const [isScientific, setIsScientific] = useState<boolean>(false);
-  const [angleMode, setAngleMode] = useState<AngleMode>('DEG');
-  const [memory, setMemory] = useState<number | null>(null);
-  
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [isHistoryOpen, setIsHistoryOpen] = useState<boolean>(false);
   const [isConverterOpen, setIsConverterOpen] = useState<boolean>(false);
+  const [isVisualizerOpen, setIsVisualizerOpen] = useState<boolean>(false);
+  const [isTimesTableOpen, setIsTimesTableOpen] = useState<boolean>(false);
+  const [isQuestOpen, setIsQuestOpen] = useState<boolean>(false);
+
   const [isSoundEnabled, setIsSoundEnabled] = useState<boolean>(true);
-  const [theme, setTheme] = useState<Theme>('dark');
+  const [isSpeechEnabled, setIsSpeechEnabled] = useState<boolean>(true);
+  const [theme, setTheme] = useState<KidTheme>('rainbow');
   const [activeKey, setActiveKey] = useState<string | null>(null);
+  const [starsCount, setStarsCount] = useState<number>(10);
+  const [mascotMessage, setMascotMessage] = useState<string>('Welcome, Grade 3 Math Superstar! 🌟');
+  const [showConfetti, setShowConfetti] = useState<boolean>(false);
 
   // Initialize from LocalStorage
   useEffect(() => {
@@ -34,10 +45,17 @@ export const Calculator: React.FC = () => {
       const savedHistory = localStorage.getItem('calc_history');
       if (savedHistory) setHistory(JSON.parse(savedHistory));
 
-      const savedTheme = localStorage.getItem('calc_theme') as Theme;
+      const savedTheme = localStorage.getItem('calc_kid_theme') as KidTheme;
       if (savedTheme) {
         setTheme(savedTheme);
         document.documentElement.setAttribute('data-theme', savedTheme);
+      } else {
+        document.documentElement.setAttribute('data-theme', 'rainbow');
+      }
+
+      const savedStars = localStorage.getItem('calc_stars');
+      if (savedStars) {
+        setStarsCount(parseInt(savedStars, 10));
       }
 
       const savedSound = localStorage.getItem('calc_sound');
@@ -46,17 +64,25 @@ export const Calculator: React.FC = () => {
         setIsSoundEnabled(soundOn);
         audioFeedback.soundEnabled = soundOn;
       }
+
+      const savedSpeech = localStorage.getItem('calc_speech');
+      if (savedSpeech !== null) {
+        const speechOn = savedSpeech === 'true';
+        setIsSpeechEnabled(speechOn);
+        audioFeedback.speechEnabled = speechOn;
+      }
     } catch {
       // safe fallback
     }
   }, []);
 
   // Update Theme
-  const handleThemeChange = (newTheme: Theme) => {
+  const handleThemeChange = (newTheme: KidTheme) => {
     setTheme(newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
+    audioFeedback.playBubble(500);
     try {
-      localStorage.setItem('calc_theme', newTheme);
+      localStorage.setItem('calc_kid_theme', newTheme);
     } catch {
       // safe fallback
     }
@@ -74,46 +100,93 @@ export const Calculator: React.FC = () => {
     }
   };
 
+  // Toggle Speech
+  const toggleSpeech = () => {
+    const nextVal = !isSpeechEnabled;
+    setIsSpeechEnabled(nextVal);
+    audioFeedback.speechEnabled = nextVal;
+    if (nextVal) {
+      audioFeedback.speakMath('Voice feedback turned on!');
+    }
+    try {
+      localStorage.setItem('calc_speech', `${nextVal}`);
+    } catch {
+      // safe fallback
+    }
+  };
+
+  // Add stars reward
+  const addStars = useCallback((count: number) => {
+    setStarsCount((prev) => {
+      const updated = prev + count;
+      try {
+        localStorage.setItem('calc_stars', `${updated}`);
+      } catch {
+        // safe fallback
+      }
+      return updated;
+    });
+  }, []);
+
+  const triggerCelebration = useCallback(() => {
+    setShowConfetti(true);
+  }, []);
+
   // Live expression preview
   useEffect(() => {
     if (!expression || expression.trim() === '') {
       setPreview('');
+      setRemainderResult(undefined);
       setError(null);
       return;
     }
 
-    // Attempt live evaluation if ends in a number, parenthesis, or constant
-    const validEnding = /[0-9)πe!]$/.test(expression);
+    const validEnding = /[0-9)πe!]$/.test(expression.trim());
     if (validEnding) {
-      const evalRes = evaluateMathExpression(expression, angleMode);
+      const evalRes = evaluateMathExpression(expression, 'DEG', remainderMode);
       if (evalRes.success && evalRes.formatted) {
         setPreview(evalRes.formatted);
+        setRemainderResult(evalRes.remainderResult);
         setError(null);
       }
     }
-  }, [expression, angleMode]);
+  }, [expression, remainderMode]);
 
   // Handle number or operator inputs
   const handleInput = useCallback((char: string) => {
     setError(null);
-    audioFeedback.playClick();
+
+    // Audio feedback differentiation
+    if (['+', '−', '×', '÷', '%'].includes(char.trim())) {
+      audioFeedback.playBoing();
+      const mascotQuotes = [
+        'Awesome operation! 🚀',
+        'Keep going, superstar! ⭐',
+        'Math power activated! 💥',
+        'You are doing great! 🌟',
+      ];
+      setMascotMessage(mascotQuotes[Math.floor(Math.random() * mascotQuotes.length)]);
+    } else {
+      audioFeedback.playBubble();
+    }
 
     setExpression((prev) => {
       // If we previously had a calculated final result and type an operator, continue with that result
-      if (result && ['+', '−', '×', '÷', '%', '^'].includes(char)) {
+      if (result && ['+', '−', '×', '÷', '%'].includes(char.trim())) {
+        const cleanBase = result.includes('R') ? result.split(' ')[0] : result;
         setResult('');
-        return result + char;
+        return cleanBase + char;
       }
-      // If previous had result and type number/function, start fresh
+      // If previous had result and type number, start fresh
       if (result) {
         setResult('');
         return char;
       }
 
       // Avoid consecutive duplicate operators
-      const ops = ['+', '−', '×', '÷', '%', '^'];
+      const ops = ['+', '−', '×', '÷', '%'];
       const lastChar = prev.slice(-1);
-      if (ops.includes(lastChar) && ops.includes(char)) {
+      if (ops.includes(lastChar) && ops.includes(char.trim())) {
         return prev.slice(0, -1) + char;
       }
 
@@ -127,12 +200,14 @@ export const Calculator: React.FC = () => {
     setExpression('');
     setResult('');
     setPreview('');
+    setRemainderResult(undefined);
     setError(null);
+    setMascotMessage('Clean chalkboard! Ready for a new puzzle! 🧹');
   }, []);
 
   // Backspace single character
   const handleBackspace = useCallback(() => {
-    audioFeedback.playClick(400);
+    audioFeedback.playBubble(380);
     setError(null);
     if (result) {
       setResult('');
@@ -140,12 +215,8 @@ export const Calculator: React.FC = () => {
     }
 
     setExpression((prev) => {
-      // If ends with function like "sin(", "cos(", "sqrt(", delete whole function
-      const fnMatches = ['sin(', 'cos(', 'tan(', 'asin(', 'acos(', 'atan(', 'sqrt(', 'cbrt(', 'log(', 'ln(', 'abs(', 'exp(', '1/('];
-      for (const fn of fnMatches) {
-        if (prev.endsWith(fn)) {
-          return prev.slice(0, -fn.length);
-        }
+      if (prev.endsWith(' R ')) {
+        return prev.slice(0, -3);
       }
       return prev.slice(0, -1);
     });
@@ -156,12 +227,28 @@ export const Calculator: React.FC = () => {
     if (!expression && !result) return;
     const targetExpr = expression || result;
 
-    const evalRes = evaluateMathExpression(targetExpr, angleMode);
+    const evalRes = evaluateMathExpression(targetExpr, 'DEG', remainderMode);
     if (evalRes.success && evalRes.formatted) {
-      audioFeedback.playEquals();
+      audioFeedback.playFanfare();
+      triggerCelebration();
       setResult(evalRes.formatted);
+      setRemainderResult(evalRes.remainderResult);
       setPreview('');
       setError(null);
+
+      // Award a star for calculating!
+      addStars(1);
+
+      const victoryMessages = [
+        'Brilliant! +1 Star earned! ⭐',
+        'Awesome answer! You rock! 🎸',
+        'Grade 3 Champion! 🏆',
+        'Math wizardry at work! 🧙‍♂️',
+      ];
+      setMascotMessage(victoryMessages[Math.floor(Math.random() * victoryMessages.length)]);
+
+      // Read aloud if speech enabled
+      audioFeedback.speakMath(`${targetExpr} equals ${evalRes.formatted}`);
 
       // Add to History
       const newHistoryItem: HistoryItem = {
@@ -181,13 +268,14 @@ export const Calculator: React.FC = () => {
       });
     } else {
       audioFeedback.playError();
-      setError(evalRes.error || 'Syntax Error');
+      setError(evalRes.error || 'Oops! Check your numbers 😊');
+      setMascotMessage('Oopsie! Check your numbers and try again! 🤗');
     }
-  }, [expression, result, angleMode]);
+  }, [expression, result, remainderMode, addStars, triggerCelebration]);
 
   // Toggle positive/negative
   const handleToggleSign = useCallback(() => {
-    audioFeedback.playClick();
+    audioFeedback.playBubble(460);
     if (result) {
       const num = parseFloat(result.replace(/,/g, ''));
       if (!isNaN(num)) {
@@ -203,53 +291,10 @@ export const Calculator: React.FC = () => {
     });
   }, [result]);
 
-  // Memory Actions
-  const handleMemory = useCallback((action: 'MC' | 'MR' | 'M+' | 'M-' | 'MS') => {
-    audioFeedback.playClick(700);
-    const currentVal = parseFloat((result || preview || expression || '0').replace(/,/g, '')) || 0;
-
-    switch (action) {
-      case 'MC':
-        setMemory(null);
-        break;
-      case 'MR':
-        if (memory !== null) {
-          handleInput(`${memory}`);
-        }
-        break;
-      case 'MS':
-        setMemory(currentVal);
-        break;
-      case 'M+':
-        setMemory((prev) => (prev !== null ? prev + currentVal : currentVal));
-        break;
-      case 'M-':
-        setMemory((prev) => (prev !== null ? prev - currentVal : -currentVal));
-        break;
-    }
-  }, [result, preview, expression, memory, handleInput]);
-
-  // Handle select from history
-  const handleSelectHistory = (item: HistoryItem) => {
-    setExpression(item.expression);
-    setResult(item.result);
-    setIsHistoryOpen(false);
-  };
-
-  // Clear history
-  const handleClearHistory = () => {
-    setHistory([]);
-    try {
-      localStorage.removeItem('calc_history');
-    } catch {
-      // safe fallback
-    }
-  };
-
   // Keyboard support
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (isConverterOpen) return;
+      if (isConverterOpen || isTimesTableOpen || isQuestOpen || isVisualizerOpen) return;
 
       const key = e.key;
       setActiveKey(key);
@@ -267,6 +312,9 @@ export const Calculator: React.FC = () => {
       } else if (key === '/') {
         e.preventDefault();
         handleInput('÷');
+      } else if (key === 'r' || key === 'R') {
+        e.preventDefault();
+        handleInput(' R ');
       } else if (key === '(' || key === ')' || key === '%') {
         e.preventDefault();
         handleInput(key);
@@ -284,7 +332,7 @@ export const Calculator: React.FC = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleInput, handleCalculate, handleBackspace, handleClear, isConverterOpen]);
+  }, [handleInput, handleCalculate, handleBackspace, handleClear, isConverterOpen, isTimesTableOpen, isQuestOpen, isVisualizerOpen]);
 
   return (
     <div className={styles.appWrapper}>
@@ -295,16 +343,19 @@ export const Calculator: React.FC = () => {
         <div className="ambient-orb orb-3"></div>
       </div>
 
+      {/* Confetti Celebration */}
+      <Confetti active={showConfetti} onComplete={() => setShowConfetti(false)} />
+
       <main className={styles.calculatorCard}>
         {/* Top Navbar Toolbar */}
         <header className={styles.toolbar}>
           <div className={styles.brandTitle}>
-            <div className={styles.brandLogo}>
-              <span>∑</span>
+            <div className={styles.brandLogo} title="Grade 3 Math Explorer">
+              <span>🌟</span>
             </div>
             <div className={styles.brandText}>
-              <h1 className={styles.appName}>QuantumCalc</h1>
-              <span className={styles.appBadge}>v2.3 • TypeScript</span>
+              <h1 className={styles.appName}>MathStars</h1>
+              <span className={styles.appBadge}>Grade 3 Explorer • Age 8–9</span>
             </div>
           </div>
 
@@ -314,80 +365,112 @@ export const Calculator: React.FC = () => {
               type="button"
               onClick={toggleSound}
               className={`${styles.toolBtn} ${isSoundEnabled ? styles.toolBtnActive : ''}`}
-              title={isSoundEnabled ? 'Mute audio feedback' : 'Enable audio clicks'}
+              title={isSoundEnabled ? 'Turn off sound clicks' : 'Turn on fun audio'}
               aria-label="Toggle Sound"
             >
               {isSoundEnabled ? '🔊' : '🔇'}
             </button>
 
-            {/* Unit Converter Button */}
+            {/* Voice Readout Toggle */}
             <button
               type="button"
-              onClick={() => setIsConverterOpen(true)}
-              className={styles.toolBtn}
-              title="Unit Converter"
-              aria-label="Open Unit Converter"
+              onClick={toggleSpeech}
+              className={`${styles.toolBtn} ${isSpeechEnabled ? styles.toolBtnActive : ''}`}
+              title={isSpeechEnabled ? 'Turn off speaking voice' : 'Turn on speaking voice'}
+              aria-label="Toggle Voice Readout"
             >
-              🔄
+              {isSpeechEnabled ? '🗣️' : '🤫'}
             </button>
 
             {/* History Drawer Toggle */}
             <button
               type="button"
-              onClick={() => setIsHistoryOpen(true)}
+              onClick={() => {
+                audioFeedback.playBubble();
+                setIsHistoryOpen(true);
+              }}
               className={styles.toolBtn}
-              title="Calculation History"
-              aria-label="Open History"
+              title="My Math Adventure Log 📜"
+              aria-label="Open History Log"
             >
-              🕒
+              📜
               {history.length > 0 && (
                 <span className={styles.historyCounter}>{history.length}</span>
               )}
             </button>
 
-            {/* Theme Selector */}
+            {/* Kid Theme Selector */}
             <select
               value={theme}
-              onChange={(e) => handleThemeChange(e.target.value as Theme)}
+              onChange={(e) => handleThemeChange(e.target.value as KidTheme)}
               className={styles.themeSelect}
-              aria-label="Select Theme"
+              aria-label="Select Kid Theme"
             >
-              <option value="dark">🌙 Dark</option>
-              <option value="light">☀️ Light</option>
-              <option value="cyberpunk">⚡ Cyber</option>
-              <option value="tokyo-neon">🌸 Tokyo Neon</option>
+              <option value="rainbow">🌈 Rainbow</option>
+              <option value="space">🚀 Space</option>
+              <option value="candy">🍭 Candy</option>
+              <option value="dino">🦕 Dino</option>
             </select>
           </div>
         </header>
 
-        {/* Mode Switcher */}
-        <div className={styles.modeTabs}>
+        {/* Mascot Companion Buddy */}
+        <MascotBuddy message={mascotMessage} starsCount={starsCount} />
+
+        {/* Grade 3 Kid Mode Nav Tabs */}
+        <nav className={styles.kidTabs} aria-label="Math Activity Modes">
           <button
             type="button"
-            onClick={() => setIsScientific(false)}
-            className={`${styles.modeTab} ${!isScientific ? styles.activeModeTab : ''}`}
+            className={`${styles.tabBtn} ${styles.tabBtnActive}`}
+            title="Calculator mode"
           >
-            Standard
+            🔢 Calculator
           </button>
           <button
             type="button"
-            onClick={() => setIsScientific(true)}
-            className={`${styles.modeTab} ${isScientific ? styles.activeModeTab : ''}`}
+            onClick={() => {
+              audioFeedback.playBubble();
+              setIsTimesTableOpen(true);
+            }}
+            className={styles.tabBtn}
+            title="Practice 1× to 12× Times Tables!"
           >
-            Scientific
+            ✖️ Times Tables
           </button>
-        </div>
+          <button
+            type="button"
+            onClick={() => {
+              audioFeedback.playFanfare();
+              setIsQuestOpen(true);
+            }}
+            className={`${styles.tabBtn} ${styles.questTab}`}
+            title="Play Math Quest & Earn Stars!"
+          >
+            🏆 Math Quest
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              audioFeedback.playBubble();
+              setIsConverterOpen(true);
+            }}
+            className={styles.tabBtn}
+            title="Explore Real Measurements!"
+          >
+            📏 Measurements
+          </button>
+        </nav>
 
         {/* Calculator Display */}
         <Display
           expression={expression}
           result={result}
           preview={preview}
-          hasMemory={memory !== null}
-          angleMode={angleMode}
-          isScientific={isScientific}
-          onToggleAngleMode={() => setAngleMode((prev) => (prev === 'DEG' ? 'RAD' : 'DEG'))}
           error={error}
+          remainderMode={remainderMode}
+          onToggleRemainderMode={() => setRemainderMode((prev) => !prev)}
+          onOpenVisualizer={() => setIsVisualizerOpen(true)}
+          remainderResult={remainderResult}
         />
 
         {/* Calculator Keypad */}
@@ -397,24 +480,13 @@ export const Calculator: React.FC = () => {
           onBackspace={handleBackspace}
           onCalculate={handleCalculate}
           onToggleSign={handleToggleSign}
-          onMemory={handleMemory}
-          isScientific={isScientific}
           activeKey={activeKey}
         />
 
-        {/* Quick Keyboard Hint Footer */}
-        <footer className={styles.footerHints}>
-          <div className={styles.hintItem}>
-            <span className="key-badge">0-9</span> Num
-          </div>
-          <div className={styles.hintItem}>
-            <span className="key-badge">+-*/</span> Ops
-          </div>
-          <div className={styles.hintItem}>
-            <span className="key-badge">Enter</span> =
-          </div>
-          <div className={styles.hintItem}>
-            <span className="key-badge">Esc</span> Clear
+        {/* Quick Helper Banner */}
+        <footer className={styles.kidFooter}>
+          <div className={styles.footerHint}>
+            <span>💡 <strong>Tip:</strong> Tap <strong>&ldquo;See Blocks 👀&rdquo;</strong> to count with stars or see place values!</span>
           </div>
         </footer>
       </main>
@@ -424,11 +496,49 @@ export const Calculator: React.FC = () => {
         isOpen={isHistoryOpen}
         history={history}
         onClose={() => setIsHistoryOpen(false)}
-        onSelect={handleSelectHistory}
-        onClear={handleClearHistory}
+        onSelect={(item) => {
+          setExpression(item.expression);
+          setResult(item.result);
+          setIsHistoryOpen(false);
+        }}
+        onClear={() => {
+          setHistory([]);
+          try {
+            localStorage.removeItem('calc_history');
+          } catch {
+            // safe fallback
+          }
+        }}
       />
 
-      {/* Unit Converter Modal */}
+      {/* Visual Math & Place Value Drawer */}
+      <VisualMathDrawer
+        isOpen={isVisualizerOpen}
+        onClose={() => setIsVisualizerOpen(false)}
+        expression={expression}
+        result={result}
+      />
+
+      {/* Times Table Modal */}
+      <TimesTableModal
+        isOpen={isTimesTableOpen}
+        onClose={() => setIsTimesTableOpen(false)}
+        onUseCalculation={(expr) => {
+          setExpression(expr);
+          setResult('');
+          handleCalculate();
+        }}
+      />
+
+      {/* Math Quest Mini Game Modal */}
+      <MathQuestModal
+        isOpen={isQuestOpen}
+        onClose={() => setIsQuestOpen(false)}
+        onEarnStars={addStars}
+        triggerCelebration={triggerCelebration}
+      />
+
+      {/* Measurement Explorer Modal */}
       <UnitConverterModal
         isOpen={isConverterOpen}
         onClose={() => setIsConverterOpen(false)}

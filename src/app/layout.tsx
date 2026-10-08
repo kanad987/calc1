@@ -1,20 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "QuantumCalc - Modern Web Calculator",
-  description: "A fast, beautiful, and feature-packed web calculator built with Next.js and TypeScript",
+  title: "MathStars 🌟 - Grade 3 Kids Calculator & Learning Explorer",
+  description: "A fun, colorful, and interactive math calculator designed specifically for Grade 3 children. Features remainder division, times tables explorer, visual math blocks, speech readout, and math quest challenges.",
 };
 
 export default function RootLayout({
@@ -23,7 +12,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="en">
       <body>{children}</body>
     </html>
   );

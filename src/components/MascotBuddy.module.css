@@ -1,0 +1,113 @@
+.mascotContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--kid-card-subtle, rgba(255, 255, 255, 0.08));
+  border: 2px solid var(--kid-border, rgba(255, 255, 255, 0.15));
+  border-radius: 20px;
+  padding: 10px 14px;
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+.mascotButton {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 18px;
+  width: 54px;
+  height: 54px;
+  min-width: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.mascotButton:hover {
+  transform: scale(1.08) rotate(-4deg);
+}
+
+.mascotButton:active {
+  transform: scale(0.95);
+}
+
+.mascotAvatar {
+  font-size: 2rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  animation: gentleBob 3s ease-in-out infinite;
+}
+
+@keyframes gentleBob {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px) scale(1.04);
+  }
+}
+
+.switchHint {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  font-size: 0.75rem;
+  background: var(--kid-badge-bg, #3b82f6);
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.speechBubble {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  position: relative;
+}
+
+.buddyHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.buddyName {
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+.starsBadge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #ffffff;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  box-shadow: 0 3px 8px rgba(245, 158, 11, 0.35);
+  animation: pulseStars 2.5s ease-in-out infinite;
+}
+
+@keyframes pulseStars {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+.bubbleText {
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 0;
+}
