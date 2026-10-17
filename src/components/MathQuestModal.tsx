@@ -93,7 +93,7 @@ export const MathQuestModal: React.FC<MathQuestModalProps> = ({
           <div className={styles.titleRow}>
             <span className={styles.titleIcon}>🏆</span>
             <div>
-              <h3 className={styles.title}>Grade 3 Math Quest</h3>
+              <h3 className={styles.title}>Kids Math Quest</h3>
               <p className={styles.subtitle}>Solve puzzles, build streaks, and earn stars!</p>
             </div>
           </div>

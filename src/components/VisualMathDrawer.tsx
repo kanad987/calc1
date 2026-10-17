@@ -53,7 +53,7 @@ export const VisualMathDrawer: React.FC<VisualMathDrawerProps> = ({
             <span className={styles.titleEmoji}>👀</span>
             <div>
               <h3 className={styles.title}>Visual Math & Place Value</h3>
-              <p className={styles.subtitle}>See math in real life! (Grade 3 Helper)</p>
+              <p className={styles.subtitle}>See math in real life! (Kids Math Helper)</p>
             </div>
           </div>
           <button type="button" onClick={onClose} className={styles.closeBtn} title="Close">

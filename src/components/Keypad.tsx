@@ -101,7 +101,7 @@ export const Keypad: React.FC<KeypadProps> = ({
           type="button"
           onClick={() => onInput(' R ')}
           className={`${styles.keyBtn} ${styles.remainderBtn}`}
-          title="Grade 3 Remainder Division (e.g. 17 R 5)"
+          title="Remainder Division (e.g. 17 R 5)"
         >
           <span className={styles.remainderPill}>Rem</span>
           <span className={styles.btnLabel}>R</span>

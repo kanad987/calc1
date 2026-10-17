@@ -53,7 +53,7 @@ export const UnitConverterModal: React.FC<UnitConverterModalProps> = ({
             <span className={styles.titleEmoji}>📏</span>
             <div>
               <h3 className={styles.title}>Measurement Explorer</h3>
-              <p className={styles.subtitle}>Grade 3 Units & Comparisons!</p>
+              <p className={styles.subtitle}>Fun Units & Real-World Comparisons!</p>
             </div>
           </div>
           <button type="button" onClick={onClose} className={styles.closeBtn}>✕</button>

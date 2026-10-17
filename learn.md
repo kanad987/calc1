@@ -1,6 +1,6 @@
 # Grade III Child UI/UX & Educational Web Application Learnings
 
-This document summarizes the reusable architectural patterns, pedagogical principles, and tactile UI/UX guidelines established while developing **Aahee's Calculator**, a web calculator designed specifically for **Grade III (Ages 8–9)** children.
+This document summarizes the reusable architectural patterns, pedagogical principles, and tactile UI/UX guidelines established while developing **Kids Calculator**, a web calculator designed specifically for **Grade III (Ages 8–9)** children.
 
 ---
 

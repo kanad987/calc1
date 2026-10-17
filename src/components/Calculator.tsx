@@ -35,7 +35,7 @@ export const Calculator: React.FC = () => {
   const [theme, setTheme] = useState<KidTheme>('rainbow');
   const [activeKey, setActiveKey] = useState<string | null>(null);
   const [starsCount, setStarsCount] = useState<number>(10);
-  const [mascotMessage, setMascotMessage] = useState<string>("Welcome, Aahee! Let's explore math! 🌟");
+  const [mascotMessage, setMascotMessage] = useState<string>("Welcome! Let's explore math! 🌟");
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
 
   // Initialize from LocalStorage
@@ -158,10 +158,10 @@ export const Calculator: React.FC = () => {
     if (['+', '−', '×', '÷', '%'].includes(char.trim())) {
       audioFeedback.playBoing();
       const mascotQuotes = [
-        'Awesome operation, Aahee! 🚀',
-        'Keep going, superstar Aahee! ⭐',
+        'Awesome operation! 🚀',
+        'Keep going, superstar! ⭐',
         'Math power activated! 💥',
-        'You are doing great, Aahee! 🌟',
+        'You are doing great! 🌟',
       ];
       setMascotMessage(mascotQuotes[Math.floor(Math.random() * mascotQuotes.length)]);
     } else {
@@ -236,10 +236,10 @@ export const Calculator: React.FC = () => {
       addStars(1);
 
       const victoryMessages = [
-        'Brilliant, Aahee! +1 Star earned! ⭐',
-        'Awesome answer! You rock, Aahee! 🎸',
-        'Grade 3 Champion! 🏆',
-        'Math wizardry at work, Aahee! 🧙‍♂️',
+        'Brilliant! +1 Star earned! ⭐',
+        'Awesome answer! You rock! 🎸',
+        'Math Champion! 🏆',
+        'Math wizardry at work! 🧙‍♂️',
       ];
       setMascotMessage(victoryMessages[Math.floor(Math.random() * victoryMessages.length)]);
 
@@ -346,12 +346,12 @@ export const Calculator: React.FC = () => {
         {/* Top Navbar Toolbar */}
         <header className={styles.toolbar}>
           <div className={styles.brandTitle}>
-            <div className={styles.brandLogo} title="Aahee's Calculator">
+            <div className={styles.brandLogo} title="Kids Calculator">
               <span>🌟</span>
             </div>
             <div className={styles.brandText}>
-              <h1 className={styles.appName}>{"Aahee's Calculator"}</h1>
-              <span className={styles.appBadge}>Grade 3 Explorer • Age 8–9</span>
+              <h1 className={styles.appName}>{"Kids Calculator"}</h1>
+              <span className={styles.appBadge}>Kids Math Explorer 🚀</span>
             </div>
           </div>
 

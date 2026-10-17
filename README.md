@@ -1,5 +1,5 @@
-# Aahee's Calculator 🌟
-A fun, tactile, and interactive Grade 3 Math Calculator and Learning Explorer built with Next.js and React.
+# Kids Calculator 🌟
+A fun, tactile, and interactive Kids Math Calculator and Learning Explorer built with Next.js and React.
 
 
 ## Getting Started

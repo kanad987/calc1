@@ -1,4 +1,4 @@
-// Mathematical Expression Evaluator with Grade 3 Kids features (Remainder division, Place values, Word conversion, Quiz generator)
+// Mathematical Expression Evaluator with Kid-friendly features (Remainder division, Place values, Word conversion, Quiz generator)
 
 export type AngleMode = 'DEG' | 'RAD';
 

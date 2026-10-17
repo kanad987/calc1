@@ -73,7 +73,7 @@ export const Display: React.FC<DisplayProps> = ({
               audioFeedback.playBoing();
             }}
             className={`${styles.modePill} ${remainderMode ? styles.modePillActive : ''}`}
-            title="Toggle Grade 3 Remainder Mode (e.g. 17 ÷ 5 = 3 R 2)"
+            title="Toggle Remainder Mode (e.g. 17 ÷ 5 = 3 R 2)"
           >
             <span>➗ Remainder</span>
             <strong>{remainderMode ? 'ON (R)' : 'OFF'}</strong>
@@ -139,9 +139,9 @@ export const Display: React.FC<DisplayProps> = ({
               )}
             </div>
 
-            {/* If there's a remainder calculation, highlight it in Grade 3 style! */}
+            {/* If there's a remainder calculation, highlight it in clean kid-friendly style! */}
             {remainderResult && remainderResult.remainder > 0 && (
-              <div className={styles.remainderBadge} title="Grade 3 Quotient & Remainder">
+              <div className={styles.remainderBadge} title="Quotient & Remainder">
                 <span>Remainder:</span>
                 <strong>{remainderResult.remainder}</strong>
               </div>
