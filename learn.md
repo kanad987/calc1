@@ -82,13 +82,13 @@ Avoid harsh clicks or flat beeps. Synthesize soft, cheerful sound effects:
 
 | Component | Responsibility |
 | :--- | :--- |
-| [`Calculator.tsx`](file:///c:/Users/admin/projects/calc1/src/components/Calculator.tsx) | Central state, star score economy, keyboard listeners, theme manager |
-| [`Display.tsx`](file:///c:/Users/admin/projects/calc1/src/components/Display.tsx) | Big typography, remainder badge, speech trigger, word spelling |
-| [`Keypad.tsx`](file:///c:/Users/admin/projects/calc1/src/components/Keypad.tsx) | 5-column tactile 3D layout with Remainder `R` & celebratory Equals `= ⭐` |
-| [`MascotBuddy.tsx`](file:///c:/Users/admin/projects/calc1/src/components/MascotBuddy.tsx) | Mascot companion switcher, cheering speech bubble, star badge |
-| [`VisualMathDrawer.tsx`](file:///c:/Users/admin/projects/calc1/src/components/VisualMathDrawer.tsx) | Array visualizer, fair-sharing groups, and base-10 place value blocks |
-| [`TimesTableModal.tsx`](file:///c:/Users/admin/projects/calc1/src/components/TimesTableModal.tsx) | 1× to 12× interactive tables with tap-to-reveal practice mode |
-| [`MathQuestModal.tsx`](file:///c:/Users/admin/projects/calc1/src/components/MathQuestModal.tsx) | Gamified Grade 3 math flashcard challenge with streak counters |
-| [`Confetti.tsx`](file:///c:/Users/admin/projects/calc1/src/components/Confetti.tsx) | Canvas particle animator for stars and celebration confetti |
-| [`audioFeedback.ts`](file:///c:/Users/admin/projects/calc1/src/utils/audioFeedback.ts) | Web Audio synthesizer & Web Speech API manager |
-| [`mathEngine.ts`](file:///c:/Users/admin/projects/calc1/src/utils/mathEngine.ts) | Remainder division evaluation, place value parser, number-to-words |
+| [`Calculator.tsx`](src/components/Calculator.tsx) | Central state, star score economy, keyboard listeners, theme manager |
+| [`Display.tsx`](src/components/Display.tsx) | Big typography, remainder badge, speech trigger, word spelling |
+| [`Keypad.tsx`](src/components/Keypad.tsx) | 5-column tactile 3D layout with Remainder `R` & celebratory Equals `= ⭐` |
+| [`MascotBuddy.tsx`](src/components/MascotBuddy.tsx) | Mascot companion switcher, cheering speech bubble, star badge |
+| [`VisualMathDrawer.tsx`](src/components/VisualMathDrawer.tsx) | Array visualizer, fair-sharing groups, and base-10 place value blocks |
+| [`TimesTableModal.tsx`](src/components/TimesTableModal.tsx) | 1× to 12× interactive tables with tap-to-reveal practice mode |
+| [`MathQuestModal.tsx`](src/components/MathQuestModal.tsx) | Gamified Grade 3 math flashcard challenge with streak counters |
+| [`Confetti.tsx`](src/components/Confetti.tsx) | Canvas particle animator for stars and celebration confetti |
+| [`audioFeedback.ts`](src/utils/audioFeedback.ts) | Web Audio synthesizer & Web Speech API manager |
+| [`mathEngine.ts`](src/utils/mathEngine.ts) | Remainder division evaluation, place value parser, number-to-words |
