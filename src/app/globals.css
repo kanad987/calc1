@@ -245,6 +245,56 @@
   background: #06b6d4;
 }
 
+[data-theme='bunny'] {
+  /* Bunny Meadow Wonderland */
+  --bg-main: #fff5f8;
+  --bg-gradient: radial-gradient(circle at 35% 20%, #ffe4ec 0%, #fed7e2 40%, #fef3c7 100%);
+  --glass-bg: rgba(255, 255, 255, 0.94);
+  --glass-border: rgba(244, 63, 94, 0.35);
+  --glass-shadow: 0 20px 50px rgba(244, 63, 94, 0.18), 0 8px 24px rgba(251, 113, 133, 0.1);
+
+  --kid-border: rgba(251, 113, 133, 0.45);
+  --kid-card-subtle: rgba(255, 241, 242, 0.92);
+  --kid-display-bg: #ffffff;
+  --kid-badge-bg: #f43f5e;
+
+  --text-primary: #881337;
+  --text-secondary: #9f1239;
+  --text-muted: #be123c;
+  --text-accent: #f43f5e;
+
+  --btn-num-bg: #ffffff;
+  --btn-num-shadow: #fecdd3;
+  --btn-num-text: #881337;
+
+  --btn-divide-bg: #06b6d4;
+  --btn-divide-shadow: #0891b2;
+
+  --btn-multiply-bg: #a855f7;
+  --btn-multiply-shadow: #7e22ce;
+
+  --btn-minus-bg: #f97316;
+  --btn-minus-shadow: #c2410c;
+
+  --btn-plus-bg: #f43f5e;
+  --btn-plus-shadow: #be123c;
+
+  --btn-clear-bg: #fb7185;
+  --btn-clear-shadow: #e11d48;
+}
+
+[data-theme='bunny'] .orb-1 {
+  background: #fb7185;
+}
+
+[data-theme='bunny'] .orb-2 {
+  background: #f472b6;
+}
+
+[data-theme='bunny'] .orb-3 {
+  background: #fde047;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

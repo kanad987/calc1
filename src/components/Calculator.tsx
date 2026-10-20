@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import Link from 'next/link';
 import styles from './Calculator.module.css';
 import { Display } from './Display';
 import { Keypad } from './Keypad';
@@ -14,7 +15,7 @@ import { Confetti } from './Confetti';
 import { evaluateMathExpression, formatNumber } from '@/utils/mathEngine';
 import { audioFeedback } from '@/utils/audioFeedback';
 
-export type KidTheme = 'rainbow' | 'space' | 'candy' | 'dino' | 'jungle';
+export type KidTheme = 'rainbow' | 'space' | 'candy' | 'dino' | 'jungle' | 'bunny';
 
 export const Calculator: React.FC = () => {
   const [expression, setExpression] = useState<string>('');
@@ -347,7 +348,14 @@ export const Calculator: React.FC = () => {
         <header className={styles.toolbar}>
           <div className={styles.brandTitle}>
             <div className={styles.brandLogo} title="Kids Calculator">
-              <span>🌟</span>
+              <span>
+                {theme === 'rainbow' && '🌈'}
+                {theme === 'space' && '🚀'}
+                {theme === 'candy' && '🍭'}
+                {theme === 'dino' && '🦕'}
+                {theme === 'jungle' && '🌴'}
+                {theme === 'bunny' && '🐰'}
+              </span>
             </div>
             <div className={styles.brandText}>
               <h1 className={styles.appName}>{"Kids Calculator"}</h1>
@@ -407,12 +415,13 @@ export const Calculator: React.FC = () => {
               <option value="candy">🍭 Candy</option>
               <option value="dino">🦕 Dino</option>
               <option value="jungle">🌴 Jungle</option>
+              <option value="bunny">🐰 Bunny</option>
             </select>
           </div>
         </header>
 
         {/* Mascot Companion Buddy */}
-        <MascotBuddy message={mascotMessage} starsCount={starsCount} />
+        <MascotBuddy message={mascotMessage} starsCount={starsCount} theme={theme} />
 
         {/* Grade 3 Kid Mode Nav Tabs */}
         <nav className={styles.kidTabs} aria-label="Math Activity Modes">
@@ -423,28 +432,22 @@ export const Calculator: React.FC = () => {
           >
             🔢 Calculator
           </button>
-          <button
-            type="button"
-            onClick={() => {
-              audioFeedback.playBubble();
-              setIsTimesTableOpen(true);
-            }}
+          <Link
+            href="/timestables"
+            onClick={() => audioFeedback.playBubble()}
             className={styles.tabBtn}
-            title="Practice 1× to 12× Times Tables!"
+            title="Go to full Times Tables Page! (1× to 12×)"
           >
             ✖️ Times Tables
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              audioFeedback.playFanfare();
-              setIsQuestOpen(true);
-            }}
+          </Link>
+          <Link
+            href="/quest"
+            onClick={() => audioFeedback.playFanfare()}
             className={`${styles.tabBtn} ${styles.questTab}`}
-            title="Play Math Quest & Earn Stars!"
+            title="Play full Kids Math Quest & Level Up!"
           >
             🏆 Math Quest
-          </button>
+          </Link>
           <button
             type="button"
             onClick={() => {
