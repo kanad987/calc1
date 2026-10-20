@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:exe": "powershell -ExecutionPolicy Bypass -File ./build-exe.ps1",
     "start": "next start",
     "lint": "eslint"
   },

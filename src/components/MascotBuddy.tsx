@@ -3,11 +3,12 @@
 import React, { useState } from 'react';
 import styles from './MascotBuddy.module.css';
 
-export type MascotId = 'pip' | 'rex' | 'sparky' | 'coco';
+export type MascotId = 'rex' | 'sparky' | 'coco' | 'barnaby';
 
 interface MascotBuddyProps {
   message: string;
   starsCount: number;
+  theme?: string;
 }
 
 interface MascotData {
@@ -18,19 +19,35 @@ interface MascotData {
   color: string;
 }
 
-const MASCOTS: MascotData[] = [
-  { id: 'pip', name: 'Pip', emoji: '🐱', title: 'Cosmic Cat', color: '#ec4899' },
+const THEME_MASCOTS: Record<string, MascotData> = {
+  rainbow: { id: 'sparky', name: 'Sparky', emoji: '🤖', title: 'Robo Buddy', color: '#6366f1' },
+  space: { id: 'sparky', name: 'Cosmo', emoji: '🚀', title: 'Space Explorer', color: '#a855f7' },
+  candy: { id: 'barnaby', name: 'Barnaby', emoji: '🐰', title: 'Candy Bunny', color: '#ec4899' },
+  dino: { id: 'rex', name: 'Rex', emoji: '🦖', title: 'Math Dino', color: '#10b981' },
+  jungle: { id: 'coco', name: 'Coco', emoji: '🐒', title: 'Jungle Explorer', color: '#f59e0b' },
+  bunny: { id: 'barnaby', name: 'Barnaby', emoji: '🐰', title: 'Bunny Hopper', color: '#f43f5e' },
+};
+
+const ALL_MASCOTS: MascotData[] = [
+  { id: 'barnaby', name: 'Barnaby', emoji: '🐰', title: 'Bunny Hopper', color: '#f43f5e' },
   { id: 'rex', name: 'Rex', emoji: '🦖', title: 'Math Dino', color: '#10b981' },
   { id: 'sparky', name: 'Sparky', emoji: '🤖', title: 'Robo Buddy', color: '#3b82f6' },
   { id: 'coco', name: 'Coco', emoji: '🐒', title: 'Jungle Explorer', color: '#f59e0b' },
 ];
 
-export const MascotBuddy: React.FC<MascotBuddyProps> = ({ message, starsCount }) => {
-  const [mascotIndex, setMascotIndex] = useState<number>(0);
-  const currentMascot = MASCOTS[mascotIndex];
+export const MascotBuddy: React.FC<MascotBuddyProps> = ({ message, starsCount, theme = 'rainbow' }) => {
+  const [customIndex, setCustomIndex] = useState<number | null>(null);
+
+  // When theme changes, default to theme mascot unless user explicitly switched
+  const currentMascot = customIndex !== null 
+    ? ALL_MASCOTS[customIndex % ALL_MASCOTS.length] 
+    : (THEME_MASCOTS[theme] || ALL_MASCOTS[0]);
 
   const handleNextMascot = () => {
-    setMascotIndex((prev) => (prev + 1) % MASCOTS.length);
+    setCustomIndex((prev) => {
+      const next = prev === null ? 1 : prev + 1;
+      return next % ALL_MASCOTS.length;
+    });
   };
 
   return (
